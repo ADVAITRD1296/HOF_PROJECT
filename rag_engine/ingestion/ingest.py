@@ -69,14 +69,26 @@ def chunk_documents(documents: List[dict], chunk_size: int = 500, overlap: int =
     return chunks
 
 
-def embed_and_store(chunks: List[dict], index_path: str = "faiss_index"):
+def embed_and_store(chunks: List[dict]):
     """
-    Embed chunks using SentenceTransformers and store in FAISS vector DB.
+    Embed chunks using SentenceTransformers and store them in Supabase Vector DB.
+    Requires SUPABASE_URL and SUPABASE_SERVICE_KEY in .env
     """
     from sentence_transformers import SentenceTransformer
-    import faiss
-    import numpy as np
-    import pickle
+    from supabase import create_client
+    from dotenv import load_dotenv
+
+    load_dotenv("../../backend/.env")
+    
+    supabase_url = os.getenv("SUPABASE_URL")
+    supabase_key = os.getenv("SUPABASE_SERVICE_KEY")
+    
+    if not supabase_url or not supabase_key:
+        logger.error("Missing Supabase credentials in .env file.")
+        return
+
+    logger.info("Connecting to Supabase...")
+    supabase = create_client(supabase_url, supabase_key)
 
     logger.info("Loading embedding model...")
     model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -85,20 +97,39 @@ def embed_and_store(chunks: List[dict], index_path: str = "faiss_index"):
     logger.info(f"Embedding {len(texts)} chunks...")
     embeddings = model.encode(texts, show_progress_bar=True)
 
-    dim = embeddings.shape[1]
-    index = faiss.IndexFlatL2(dim)
-    index.add(np.array(embeddings).astype("float32"))
+    # Insert into Supabase table
+    # Note: Replace 'legal_documents' with your actual table name if different.
+    table_name = "legal_documents" 
+    
+    records = []
+    for chunk, embedding in zip(chunks, embeddings):
+        records.append({
+            "chunk_text": chunk["content"],
+            "embedding": embedding.tolist(),
+            "act_name": chunk.get("source", "Unknown"),
+            "section": "General", 
+            "title": "Document Section",
+        })
 
-    # Save index + metadata
-    os.makedirs(index_path, exist_ok=True)
-    faiss.write_index(index, f"{index_path}/legal.index")
-    with open(f"{index_path}/chunks.pkl", "wb") as f:
-        pickle.dump(chunks, f)
+    logger.info(f"Uploading {len(records)} records to Supabase table '{table_name}'...")
+    
+    # Upload in batches of 100
+    batch_size = 100
+    for i in range(0, len(records), batch_size):
+        batch = records[i:i + batch_size]
+        try:
+            supabase.table(table_name).insert(batch).execute()
+            logger.info(f"Uploaded batch {i//batch_size + 1}")
+        except Exception as e:
+            logger.error(f"Error uploading batch: {e}")
 
-    logger.info(f"✅ Stored {len(chunks)} vectors in FAISS at '{index_path}'")
+    logger.info(f"✅ Successfully stored vectors in Supabase '{table_name}'")
 
 
 if __name__ == "__main__":
     docs = load_documents()
-    chunks = chunk_documents(docs)
-    embed_and_store(chunks)
+    if not docs:
+        logger.warning("No documents found in data/raw to ingest.")
+    else:
+        chunks = chunk_documents(docs)
+        embed_and_store(chunks)
