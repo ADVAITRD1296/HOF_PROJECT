@@ -58,3 +58,8 @@ class DocumentResponse(BaseModel):
     title: str
     content: str
     disclaimer: str = "Review this draft with a lawyer before submission."
+
+
+class PDFRequest(BaseModel):
+    content: str
+    filename: Optional[str] = "legal_document"
