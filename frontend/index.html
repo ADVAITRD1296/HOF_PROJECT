@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LexisCo — AI Legal Guide for India</title>
+  <meta name="description" content="LexisCo is an AI-powered legal guidance assistant for India. Get step-by-step legal help in Hindi and English — not just answers, but real action." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Navigation ────────────────────────────────────────────────────── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" id="nav-logo-link">
+        <span class="logo-icon">⚖️</span>
+        <span class="logo-text">LexisCo</span>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#demo" class="nav-link">Try Demo</a></li>
+        <li><a href="#tech" class="nav-link">Tech Stack</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#demo" class="btn btn-primary" id="nav-cta-btn">Try Free →</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Hero Section ──────────────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-orb orb-1"></div>
+      <div class="hero-orb orb-2"></div>
+      <div class="hero-orb orb-3"></div>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge" id="hero-badge">
+        <span class="badge-dot"></span>
+        AI / ML Hackathon Project
+      </div>
+      <h1 class="hero-title" id="hero-title">
+        Your AI Legal Guide<br />
+        <span class="gradient-text">Not Just Answers,</span><br />
+        But Real Action.
+      </h1>
+      <p class="hero-subtitle" id="hero-subtitle">
+        LexisCo guides you <strong>step-by-step</strong> through India's legal system —
+        from understanding your rights to filing an FIR or consumer complaint.
+        In <span class="highlight">Hindi</span> &amp; English.
+      </p>
+      <div class="hero-actions" id="hero-actions">
+        <a href="#demo" class="btn btn-primary btn-lg">
+          <span>Ask a Legal Question</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#how-it-works" class="btn btn-ghost btn-lg">See How It Works</a>
+      </div>
+      <div class="hero-stats" id="hero-stats">
+        <div class="stat-card">
+          <span class="stat-num">50+</span>
+          <span class="stat-label">Indian Laws Covered</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-num">4</span>
+          <span class="stat-label">Guided Steps Per Issue</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-num">2</span>
+          <span class="stat-label">Languages Supported</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual" id="hero-visual">
+      <div class="chat-preview-card">
+        <div class="card-header">
+          <div class="card-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="card-title">LexisCo AI</span>
+          <span class="card-status"><span class="pulse-dot"></span> Live</span>
+        </div>
+        <div class="chat-messages" id="preview-messages">
+          <div class="msg msg-user">
+            <span>My landlord is not returning my security deposit of ₹50,000. What should I do?</span>
+          </div>
+          <div class="msg msg-ai">
+            <div class="msg-icon">⚖️</div>
+            <div class="msg-content">
+              <p class="msg-summary">This falls under the <strong>Transfer of Property Act</strong> &amp; Consumer Protection Act. Here's your action plan:</p>
+              <div class="step-pills">
+                <div class="step-pill active"><span class="step-num">1</span> Document Everything</div>
+                <div class="step-pill"><span class="step-num">2</span> Send Legal Notice</div>
+                <div class="step-pill"><span class="step-num">3</span> File Consumer Complaint</div>
+                <div class="step-pill"><span class="step-num">4</span> Approach Rent Authority</div>
+              </div>
+              <div class="citation-tag">📌 Sec 106, Transfer of Property Act</div>
+            </div>
+          </div>
+        </div>
+        <div class="suggestion-chips">
+          <button class="chip" id="chip-notice">Generate Legal Notice</button>
+          <button class="chip" id="chip-complaint">File Complaint</button>
+          <button class="chip" id="chip-lawyer">Find Lawyer</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features Section ──────────────────────────────────────────────── -->
+  <section class="features" id="features">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">What We Offer</span>
+        <h2 class="section-title">Built Different.<br/><span class="gradient-text">Designed for Action.</span></h2>
+        <p class="section-subtitle">Every feature is engineered to bridge the gap between legal complexity and real-world action.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card feature-card--large" id="feat-1">
+          <div class="feat-icon-wrap" style="--c: #7c3aed">🧭</div>
+          <h3>Step-by-Step Legal Guidance</h3>
+          <p>Instead of overwhelming legal jargon, get a clean mentor-style guide: understand → identify law → take action → next steps.</p>
+          <div class="feat-tag">Core USP</div>
+        </div>
+        <div class="feature-card" id="feat-2">
+          <div class="feat-icon-wrap" style="--c: #0ea5e9">📄</div>
+          <h3>FIR &amp; Complaint Generator</h3>
+          <p>Auto-generate ready-to-use FIR drafts, consumer complaints, and legal notices — just fill your details.</p>
+        </div>
+        <div class="feature-card" id="feat-3">
+          <div class="feat-icon-wrap" style="--c: #10b981">📚</div>
+          <h3>Verified Citations</h3>
+          <p>Every answer includes the exact IPC / BNS / Consumer Act section with a clear explanation of why it applies to your case.</p>
+        </div>
+        <div class="feature-card" id="feat-4">
+          <div class="feat-icon-wrap" style="--c: #f59e0b">🌐</div>
+          <h3>Hindi + English</h3>
+          <p>Explains complex legal terms in simple Hindi or English. Justice should not have a language barrier.</p>
+        </div>
+        <div class="feature-card" id="feat-5">
+          <div class="feat-icon-wrap" style="--c: #ef4444">⚠️</div>
+          <h3>Anti-Hallucination RAG</h3>
+          <p>Powered by Retrieval-Augmented Generation — only answers from verified legal documents, with clear disclaimers.</p>
+        </div>
+        <div class="feature-card" id="feat-6">
+          <div class="feat-icon-wrap" style="--c: #8b5cf6">🤖</div>
+          <h3>Smart Follow-Up Actions</h3>
+          <p>After every answer: "Do you want to generate an FIR?", "Find the nearest consumer forum?". Interactive, never passive.</p>
+        </div>
+        <div class="feature-card" id="feat-7">
+          <div class="feat-icon-wrap" style="--c: #06b6d4">🎤</div>
+          <h3>Voice Input</h3>
+          <p>Speak your problem — LexisCo transcribes and processes it. Especially useful for non-technical users and rural accessibility.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ───────────────────────────────────────────────────── -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">The Process</span>
+        <h2 class="section-title">From Problem<br/><span class="gradient-text">to Action in 4 Steps</span></h2>
+      </div>
+      <div class="steps-timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-step" id="step-1">
+          <div class="step-bubble"><span>01</span></div>
+          <div class="step-body">
+            <h3>You Describe Your Problem</h3>
+            <p>In plain Hindi or English — no legal knowledge needed. Type or speak your situation.</p>
+          </div>
+        </div>
+        <div class="timeline-step" id="step-2">
+          <div class="step-bubble"><span>02</span></div>
+          <div class="step-body">
+            <h3>AI Retrieves Relevant Laws</h3>
+            <p>Our RAG pipeline searches verified Indian legal documents (IPC, BNS, Consumer Act, RTI, etc.) using semantic similarity.</p>
+          </div>
+        </div>
+        <div class="timeline-step" id="step-3">
+          <div class="step-bubble"><span>03</span></div>
+          <div class="step-body">
+            <h3>LLM Generates Action Plan</h3>
+            <p>LLaMA 3 (via Groq) generates a structured, step-by-step legal action plan — grounded only in retrieved documents.</p>
+          </div>
+        </div>
+        <div class="timeline-step" id="step-4">
+          <div class="step-bubble"><span>04</span></div>
+          <div class="step-body">
+            <h3>You Take Real Action</h3>
+            <p>Download FIR drafts, complaints, or notices. Follow the guided steps to actually resolve your legal issue.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Demo Section ───────────────────────────────────────────────────── -->
+  <section class="demo-section" id="demo">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">Interactive Demo</span>
+        <h2 class="section-title">Try LexisCo<br/><span class="gradient-text">Right Now</span></h2>
+        <p class="section-subtitle">Ask any legal question. Get a structured, step-by-step action plan.</p>
+      </div>
+
+      <div class="demo-wrapper">
+        <!-- Input Panel -->
+        <div class="demo-input-panel">
+          <div class="demo-lang-toggle">
+            <button class="lang-btn active" id="lang-en" data-lang="en">🇬🇧 English</button>
+            <button class="lang-btn" id="lang-hi" data-lang="hi">🇮🇳 हिंदी</button>
+          </div>
+          <div class="demo-examples">
+            <p class="examples-label">Try an example:</p>
+            <div class="example-chips">
+              <button class="example-chip" id="ex-1" data-query="My employer has not paid my salary for 3 months. What legal action can I take?">💼 Unpaid Salary</button>
+              <button class="example-chip" id="ex-2" data-query="My landlord is refusing to return my security deposit of ₹50,000 after I vacated the house.">🏠 Security Deposit</button>
+              <button class="example-chip" id="ex-3" data-query="I bought a defective product online and the seller is refusing to refund. What are my consumer rights?">🛒 Online Fraud Refund</button>
+              <button class="example-chip" id="ex-4" data-query="Someone is threatening me online. What legal action can I take under cyber law?">💻 Cyber Threat</button>
+            </div>
+          </div>
+          <div class="demo-textarea-wrap">
+            <textarea
+              id="demo-query"
+              class="demo-textarea"
+              placeholder="Describe your legal problem in simple language (Hindi or English)..."
+              rows="4"
+            ></textarea>
+            <div class="textarea-actions">
+              <button class="voice-btn" id="voice-btn" title="Voice input">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              </button>
+              <span class="char-count" id="char-count">0 / 500</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-full" id="ask-btn">
+            <span id="ask-btn-text">Get Legal Guidance →</span>
+            <div class="btn-spinner" id="btn-spinner"></div>
+          </button>
+        </div>
+
+        <!-- Output Panel -->
+        <div class="demo-output-panel" id="demo-output">
+          <div class="output-placeholder" id="output-placeholder">
+            <div class="placeholder-icon">⚖️</div>
+            <p>Your legal guidance will appear here.<br/>Ask a question to get started.</p>
+          </div>
+          <div class="output-result hidden" id="output-result">
+            <!-- Dynamically filled by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Tech Stack ─────────────────────────────────────────────────────── -->
+  <section class="tech-section" id="tech">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">Under the Hood</span>
+        <h2 class="section-title">The <span class="gradient-text">AI/ML Stack</span><br/>Powering LexisCo</h2>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card" id="tc-1">
+          <div class="tech-layer-label">Retrieval Layer</div>
+          <div class="tech-items">
+            <div class="tech-item"><span class="tech-badge">FAISS</span><span>Vector Database</span></div>
+            <div class="tech-item"><span class="tech-badge">SentenceTransformers</span><span>Embeddings</span></div>
+            <div class="tech-item"><span class="tech-badge">LangChain</span><span>RAG Orchestration</span></div>
+          </div>
+        </div>
+        <div class="tech-card" id="tc-2">
+          <div class="tech-layer-label">Generation Layer</div>
+          <div class="tech-items">
+            <div class="tech-item"><span class="tech-badge">LLaMA 3 (70B)</span><span>Language Model</span></div>
+            <div class="tech-item"><span class="tech-badge">Groq API</span><span>Inference Engine</span></div>
+            <div class="tech-item"><span class="tech-badge">Prompt Engineering</span><span>Structured Output</span></div>
+          </div>
+        </div>
+        <div class="tech-card" id="tc-3">
+          <div class="tech-layer-label">Backend</div>
+          <div class="tech-items">
+            <div class="tech-item"><span class="tech-badge">FastAPI</span><span>REST API</span></div>
+            <div class="tech-item"><span class="tech-badge">Supabase</span><span>Database & Auth</span></div>
+            <div class="tech-item"><span class="tech-badge">Python 3.10+</span><span>Core Language</span></div>
+          </div>
+        </div>
+        <div class="tech-card" id="tc-4">
+          <div class="tech-layer-label">Frontend</div>
+          <div class="tech-items">
+            <div class="tech-item"><span class="tech-badge">HTML5 / CSS3</span><span>Structure & Style</span></div>
+            <div class="tech-item"><span class="tech-badge">Vanilla JS</span><span>Interactivity</span></div>
+            <div class="tech-item"><span class="tech-badge">Web Speech API</span><span>Voice Input</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rag-diagram" id="rag-diagram">
+        <div class="rag-node"><span class="rag-node-icon">📝</span><span>User Query</span></div>
+        <div class="rag-arrow">→</div>
+        <div class="rag-node"><span class="rag-node-icon">🔍</span><span>Embeddings<br/>&amp; Search</span></div>
+        <div class="rag-arrow">→</div>
+        <div class="rag-node highlight-node"><span class="rag-node-icon">📚</span><span>Legal Docs<br/>(FAISS)</span></div>
+        <div class="rag-arrow">→</div>
+        <div class="rag-node"><span class="rag-node-icon">🤖</span><span>LLaMA 3<br/>(Groq)</span></div>
+        <div class="rag-arrow">→</div>
+        <div class="rag-node"><span class="rag-node-icon">🧭</span><span>Step-by-Step<br/>Guidance</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA Banner ─────────────────────────────────────────────────────── -->
+  <section class="cta-banner" id="cta-banner">
+    <div class="cta-orb cta-orb-1"></div>
+    <div class="cta-orb cta-orb-2"></div>
+    <div class="cta-inner">
+      <h2>Justice Should Be<br/><span class="gradient-text">Accessible to Everyone.</span></h2>
+      <p>LexisCo brings clarity, action, and legal empowerment to millions of Indians who don't know where to start.</p>
+      <a href="#demo" class="btn btn-primary btn-lg" id="cta-main-btn">Start Your Legal Journey →</a>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">⚖️</span>
+        <span class="logo-text">LexisCo</span>
+        <p class="footer-tagline">AI Legal Guide for India</p>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#demo">Demo</a>
+        <a href="#tech">Tech Stack</a>
+      </div>
+      <div class="footer-disclaimer">
+        ⚠️ LexisCo provides AI-generated legal <em>guidance</em>, not legal <em>advice</em>.
+        Always consult a qualified lawyer for important matters.
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 LexisCo — Hackathon Project · AI / ML Track</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
