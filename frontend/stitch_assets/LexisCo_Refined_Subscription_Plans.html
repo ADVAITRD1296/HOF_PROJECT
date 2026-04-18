@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LexisCo - Subscription</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#1c1b1b",
+                      "on-surface-variant": "#c3c6cf",
+                      "secondary-fixed-dim": "#abc8f5",
+                      "tertiary": "#e9c176",
+                      "on-primary-container": "#a2a3a3",
+                      "inverse-primary": "#5d5f5f",
+                      "inverse-surface": "#e5e2e1",
+                      "error": "#ffb4ab",
+                      "on-primary-fixed-variant": "#454747",
+                      "surface-bright": "#393939",
+                      "background": "#131313",
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface-dim": "#131313",
+                      "surface-container-high": "#2a2a2a",
+                      "outline": "#8d9199",
+                      "on-secondary-container": "#99b7e3",
+                      "on-tertiary-container": "#c29d57",
+                      "primary-container": "#37393a",
+                      "on-secondary-fixed": "#001c39",
+                      "on-secondary-fixed-variant": "#2a486e",
+                      "secondary-container": "#2a486e",
+                      "on-secondary": "#0f3156",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary": "#412d00",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "inverse-on-surface": "#313030",
+                      "surface-container": "#201f1f",
+                      "primary": "#c6c6c6",
+                      "primary-fixed": "#e2e2e2",
+                      "tertiary-fixed-dim": "#e9c176",
+                      "secondary": "#abc8f5",
+                      "on-error": "#690005",
+                      "on-surface": "#e5e2e1",
+                      "error-container": "#93000a",
+                      "surface-variant": "#353534",
+                      "surface-container-highest": "#353534",
+                      "outline-variant": "#43474e",
+                      "tertiary-container": "#4c3500",
+                      "on-tertiary-fixed-variant": "#5d4201",
+                      "on-tertiary-fixed": "#261900",
+                      "surface": "#131313",
+                      "on-primary": "#2f3131",
+                      "tertiary-fixed": "#ffdea5",
+                      "on-primary-fixed": "#1a1c1c",
+                      "on-background": "#e5e2e1",
+                      "surface-tint": "#c6c6c6",
+                      "secondary-fixed": "#d3e3ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Manrope"
+                      ],
+                      "body": [
+                              "Inter"
+                      ],
+                      "label": [
+                              "Inter"
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-panel {
+            background: rgba(28, 27, 27, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .liquid-glass-btn {
+            background: linear-gradient(180deg, rgba(198,198,198,0.1) 0%, rgba(198,198,198,0.02) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(198, 198, 198, 0.15);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .liquid-glass-btn:hover {
+            background: linear-gradient(180deg, rgba(198,198,198,0.15) 0%, rgba(198,198,198,0.05) 100%);
+            border-color: rgba(198, 198, 198, 0.25);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        .liquid-glass-btn-premium {
+            background: linear-gradient(180deg, rgba(233,193,118,0.1) 0%, rgba(233,193,118,0.02) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(233, 193, 118, 0.2);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 4px 20px rgba(233, 193, 118, 0.1);
+        }
+        .liquid-glass-btn-premium:hover {
+            background: linear-gradient(180deg, rgba(233,193,118,0.15) 0%, rgba(233,193,118,0.05) 100%);
+            border-color: rgba(233, 193, 118, 0.3);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 30px rgba(233, 193, 118, 0.2);
+            transform: translateY(-2px);
+        }
+        .glow-border {
+            position: relative;
+        }
+        .glow-border::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            background: linear-gradient(45deg, rgba(233,193,118,0), rgba(233,193,118,0.4), rgba(233,193,118,0));
+            border-radius: 32px; /* match card radius */
+            z-index: -1;
+            filter: blur(8px);
+        }
+        .glass-text {
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+      </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<nav class="bg-[#131313]/80 backdrop-blur-xl docked full-width top-0 z-50 bg-[#1c1b1b] shadow-[0px_20px_50px_rgba(0,0,0,0.4)] flex justify-between items-center px-8 h-20 w-full fixed">
+<div class="text-2xl font-semibold tracking-tighter text-neutral-300 font-headline">LexisCo</div>
+<div class="hidden md:flex gap-8 items-center font-manrope tracking-tight">
+<a class="text-neutral-500 hover:text-neutral-300 transition-colors duration-300 ease-in-out hover:bg-neutral-800/50 px-3 py-2 rounded-DEFAULT" href="#">Research</a>
+<a class="text-neutral-500 hover:text-neutral-300 transition-colors duration-300 ease-in-out hover:bg-neutral-800/50 px-3 py-2 rounded-DEFAULT" href="#">Archive</a>
+<a class="text-neutral-500 hover:text-neutral-300 transition-colors duration-300 ease-in-out hover:bg-neutral-800/50 px-3 py-2 rounded-DEFAULT" href="#">Insights</a>
+<a class="text-[#e9c176] font-bold border-b-2 border-[#e9c176] pb-1 duration-300 ease-in-out px-3 py-2" href="#">Subscription</a>
+</div>
+<div class="flex items-center gap-4 text-neutral-300">
+<button class="p-2 hover:bg-neutral-800/50 rounded-full transition-colors duration-300 ease-in-out flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="p-2 hover:bg-neutral-800/50 rounded-full transition-colors duration-300 ease-in-out flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-surface-container-high overflow-hidden ml-2 border border-outline-variant/15">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="professional corporate headshot of a person in a dark suit against a neutral dark grey background, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl-ofFfrfKdI-KbO84b2k6BBHvqFlqiNdWz86JBoXM9jT-vSY6cIyI07huxcYrGeiHkNfndb5fQ9g_87iCLSj149m9ngrdab_LVTmWMRsLkcO_BNqiDUH1RevDyAhVKJxvLlRaN7G3HBk3YY21rROjd6aEbFk68tlbTJOpnVsL2dtgDsDCtHFWwX1p9n9QWkIoDfqpAtupN9NHexblXa_X6LHWs5iloONkUQ8znOjzJIQKdRQ7FCKPvaUEYObabBYbOXOLx5wUkWQ"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto w-full flex flex-col items-center">
+<!-- Header -->
+<header class="text-center mb-20 max-w-3xl">
+<h1 class="font-headline text-5xl md:text-6xl text-primary font-bold tracking-tight mb-6">Invest in Your Practice</h1>
+<p class="text-on-surface-variant text-lg md:text-xl font-body leading-relaxed max-w-2xl mx-auto">
+                Elevate your legal research with unparalleled precision. Choose the tier that aligns with your firm's ambition.
+            </p>
+</header>
+<!-- Pricing Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl relative z-10">
+<!-- Background Ambient Light -->
+<div class="absolute inset-0 bg-secondary/5 blur-[120px] rounded-full z-[-1] pointer-events-none"></div>
+<!-- Card 1: Associate -->
+<div class="glass-panel rounded-[32px] p-8 flex flex-col h-full border border-outline-variant/15">
+<div class="mb-8">
+<h3 class="font-headline text-2xl mb-2 glass-text font-semibold">Associate</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-headline font-bold glass-text">Free</span>
+</div>
+<p class="text-on-surface-variant text-sm mt-4 font-label tracking-wide">For foundational research and individuals.</p>
+</div>
+<ul class="flex-grow space-y-4 mb-12">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">Access to public case law</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">Basic semantic search</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">Save up to 50 documents</span>
+</li>
+<li class="flex items-start gap-3 opacity-50">
+<span class="material-symbols-outlined text-outline text-sm mt-1" style="font-variation-settings: 'FILL' 0;">lock</span>
+<span class="text-on-surface-variant text-sm">No AI-driven precedent mapping</span>
+</li>
+<li class="flex items-start gap-3 opacity-50">
+<span class="material-symbols-outlined text-outline text-sm mt-1" style="font-variation-settings: 'FILL' 0;">lock</span>
+<span class="text-on-surface-variant text-sm">No predictive litigation analytics</span>
+</li>
+</ul>
+<button class="liquid-glass-btn w-full py-4 rounded-lg text-primary font-medium tracking-wide flex items-center justify-center gap-2">
+                    Get Started
+                </button>
+</div>
+<!-- Card 2: Partner -->
+<div class="glass-panel rounded-[32px] p-8 flex flex-col h-full border border-outline-variant/15 relative shadow-[0px_20px_50px_rgba(0,0,0,0.3)] bg-surface-container-high/40">
+<div class="mb-8">
+<h3 class="font-headline text-2xl mb-2 glass-text font-semibold">Partner</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-headline font-bold glass-text">₹199</span>
+<span class="text-on-surface-variant text-sm">/month</span>
+</div>
+<p class="text-on-surface-variant text-sm mt-4 font-label tracking-wide">For established practices requiring depth.</p>
+</div>
+<ul class="flex-grow space-y-4 mb-12">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">Full appellate &amp; supreme court archives</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">AI-driven precedent mapping</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">Unlimited saved documents &amp; folders</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">Priority email support</span>
+</li>
+</ul>
+<button class="liquid-glass-btn w-full py-4 rounded-lg text-secondary font-medium tracking-wide flex items-center justify-center gap-2">
+                    Upgrade to Partner
+                </button>
+</div>
+<!-- Card 3: Sovereign -->
+<div class="glass-panel rounded-[32px] p-8 flex flex-col h-full border border-tertiary/30 glow-border bg-surface-container-high/60 relative shadow-[0px_30px_60px_rgba(233,193,118,0.05)]">
+<div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-tertiary text-on-tertiary text-xs font-bold px-4 py-1.5 rounded-full font-label tracking-widest uppercase shadow-[0_0_15px_rgba(233,193,118,0.5)]">
+                    Recommended
+                </div>
+<div class="mb-8">
+<h3 class="font-headline text-2xl mb-2 flex items-center gap-2 glass-text font-semibold">
+                        Sovereign
+                        <span class="material-symbols-outlined text-tertiary drop-shadow-md" style="font-size: 20px; font-variation-settings: 'FILL' 1;">local_police</span>
+</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-headline font-bold glass-text">₹699</span>
+<span class="text-on-surface-variant text-sm">/month</span>
+</div>
+<p class="text-on-surface-variant text-sm mt-4 font-label tracking-wide">The ultimate arsenal for legal dominance.</p>
+</div>
+<ul class="flex-grow space-y-4 mb-12">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm text-on-surface">Everything in Partner</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">Predictive litigation analytics</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">Automated brief drafting (LexisAI)</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-sm mt-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface-variant text-sm">White-glove dedicated counsel</span>
+</li>
+</ul>
+<button class="liquid-glass-btn-premium w-full py-4 rounded-lg text-tertiary font-bold tracking-wide flex items-center justify-center gap-2">
+                    Claim Authority
+                </button>
+</div>
+</div>
+</main>
+<!-- Footer Area (Minimalist for dark theme) -->
+<footer class="mt-auto border-t border-outline-variant/10 py-12 px-8">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="text-xl font-bold tracking-tighter text-neutral-500 font-headline">LexisCo</div>
+<div class="flex gap-6 text-sm text-neutral-500 font-label tracking-wide">
+<a class="hover:text-primary transition-colors" href="#">Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>
