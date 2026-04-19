@@ -17,32 +17,60 @@ CONTEXT (Retrieved Legal Documents):
 {context}
 ---
 
+USER ATTACHMENTS / EVIDENCE:
+{attachments}
+---
+
 USER QUERY: {query}
 LANGUAGE: {language}
 
+STRICT RESPONSE RULES:
+- Use USER ATTACHMENTS as the primary source of truth for the facts of this specific case.
+- Cross-reference the USER ATTACHMENTS with the CONTEXT (Statutes/Precedents) to provide customized solutions.
+- If the attachments contain a deadline, amount, or specific clause, mention it explicitly in the solutions.
+- ALL values in the JSON structure (issue, law, reason, summary, detailed_analysis, description, etc.) MUST be translated and written in the requested LANGUAGE ({language}).
+- Do NOT translate Act names (e.g., 'IPC', 'Bharatiya Nyaya Sanhita') but you may provide their translated context.
+- The JSON keys must remain in English.
+
 Respond in this EXACT JSON structure:
 {{
-  "summary": "<one paragraph summary of the legal situation>",
+  "issue": "<Short title in {language}>",
+  "law": "<Specific Acts and Sections, keep Act names standard but translate intent if needed in {language}>",
+  "reason": "<Strategic reason in {language}>",
+  "summary": "<Situation summary in {language}>",
+  "detailed_analysis": "<Detailed 3-paragraph analysis in {language}>",
+  "strength": <Integer 1-100>,
   "steps": [
     {{
       "step_number": 1,
-      "title": "<short title>",
-      "description": "<clear explanation>",
-      "action_required": "<specific action the user must take>"
+      "title": "<title in {language}>",
+      "description": "<explanation in {language}>",
+      "action_required": "<action in {language}>"
     }}
   ],
   "citations": [
     {{
-      "act": "<full act name>",
-      "section": "<section number>",
-      "description": "<what the section says>",
-      "why_applicable": "<why it applies to this case>"
+      "act": "<Act name>",
+      "section": "<Section>",
+      "description": "<Description in {language}>",
+      "why_applicable": "<Reason in {language}>"
     }}
   ],
-  "suggested_actions": ["<action 1>", "<action 2>", "<action 3>"],
+  "precedents": [
+    {{
+      "title": "<Case Name>",
+      "citation": "<Full Citation>",
+      "summary": "<Summary in {language}>",
+      "outcome": "<Ruling in {language}>",
+      "relevance": "<Relevance in {language}>",
+      "similarity_score": "<e.g., 95%>"
+    }}
+  ],
+  "suggested_actions": ["<Action 1 in {language}>", "<Action 2 in {language}>"],
   "disclaimer": "This is AI-generated legal guidance based on retrieved documents, not legal advice. Please consult a qualified lawyer for your specific situation."
 }}
 
+Respond ONLY with JSON. Ensure the 'precedents' list contains exactly 5 items based on the HISTORICAL CASE section of the context.
 Respond ONLY with the JSON. No markdown. No extra text.
 """
 
@@ -57,4 +85,17 @@ Add placeholders like [NAME], [DATE], [ADDRESS] where user needs to fill in deta
 Include a clear note that this is a template and must be reviewed by a lawyer.
 
 Respond ONLY with the document text.
+"""
+
+CASE_CLASSIFICATION_PROMPT = """You are LexisCo, an intelligent legal agent matching users to lawyers.
+Based on the USER's situation, determine the single most relevant "Practice Area" that a lawyer should specialize in.
+Common examples: Criminal, Civil, Corporate, Family, Cybercrime, Property, Consumer, Intellectual Property.
+
+USER SITUATION: {query}
+
+Respond in this EXACT JSON structure:
+{{
+  "category": "<single category string like 'Criminal' or 'Family'>"
+}}
+Respond ONLY with JSON.
 """

@@ -32,7 +32,7 @@ app = FastAPI(
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=["*"], # Allow all for development to fix "Login not working"
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

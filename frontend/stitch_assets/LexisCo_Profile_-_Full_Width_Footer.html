@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sovereign Scholar - Profile Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#ffdad6",
+                    "inverse-surface": "#e5e2e1",
+                    "primary": "#c6c6c6",
+                    "on-secondary-fixed": "#001c39",
+                    "on-background": "#e5e2e1",
+                    "surface-container-low": "#1c1b1b",
+                    "outline-variant": "#43474e",
+                    "on-secondary-container": "#99b7e3",
+                    "background": "#131313",
+                    "tertiary-fixed-dim": "#e9c176",
+                    "on-tertiary-container": "#c29d57",
+                    "primary-fixed": "#e2e2e2",
+                    "on-surface": "#e5e2e1",
+                    "on-secondary-fixed-variant": "#2a486e",
+                    "surface-container-high": "#2a2a2a",
+                    "error": "#ffb4ab",
+                    "on-tertiary-fixed-variant": "#5d4201",
+                    "on-tertiary": "#412d00",
+                    "surface": "#131313",
+                    "primary-fixed-dim": "#c6c6c6",
+                    "secondary": "#abc8f5",
+                    "primary-container": "#37393a",
+                    "surface-variant": "#353534",
+                    "on-primary": "#2f3131",
+                    "surface-container": "#201f1f",
+                    "on-primary-container": "#a2a3a3",
+                    "surface-bright": "#393939",
+                    "inverse-on-surface": "#313030",
+                    "secondary-fixed-dim": "#abc8f5",
+                    "secondary-container": "#2a486e",
+                    "on-primary-fixed": "#1a1c1c",
+                    "on-tertiary-fixed": "#261900",
+                    "surface-tint": "#c6c6c6",
+                    "tertiary-fixed": "#ffdea5",
+                    "surface-container-highest": "#353534",
+                    "secondary-fixed": "#d3e3ff",
+                    "surface-dim": "#131313",
+                    "outline": "#8d9199",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-primary-fixed-variant": "#454747",
+                    "inverse-primary": "#5d5f5f",
+                    "on-error": "#690005",
+                    "tertiary-container": "#4c3500",
+                    "on-secondary": "#0f3156",
+                    "tertiary": "#e9c176",
+                    "on-surface-variant": "#c3c6cf",
+                    "error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {},
+            "fontFamily": {
+                    "headline": [
+                            "Manrope"
+                    ],
+                    "body": [
+                            "Inter"
+                    ],
+                    "label": [
+                            "Inter"
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .glass-panel {
+            background: rgba(28, 27, 27, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(67, 71, 78, 0.15);
+        }
+        
+        .ambient-shadow {
+            box-shadow: 0px 20px 50px rgba(0,0,0,0.4);
+        }
+        
+        .ghost-border {
+            border: 1px solid rgba(67, 71, 78, 0.15);
+        }
+        
+        .btn-liquid-glass {
+            background: rgba(198, 198, 198, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(198, 198, 198, 0.1);
+            box-shadow: inset 0 0 15px rgba(198, 198, 198, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-liquid-glass:hover {
+            background: rgba(198, 198, 198, 0.1);
+            border-color: rgba(198, 198, 198, 0.2);
+            box-shadow: inset 0 0 20px rgba(198, 198, 198, 0.1);
+        }
+        
+        .btn-destructive-glass {
+            background: rgba(255, 180, 171, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 180, 171, 0.1);
+            box-shadow: inset 0 0 15px rgba(255, 180, 171, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-destructive-glass:hover {
+            background: rgba(255, 180, 171, 0.15);
+            border-color: rgba(255, 180, 171, 0.3);
+            box-shadow: inset 0 0 20px rgba(255, 180, 171, 0.1), 0 0 20px rgba(255, 180, 171, 0.1);
+        }
+    </style>
+</head>
+<body class="text-on-background font-body antialiased min-h-screen flex flex-col">
+<div class="flex flex-1 w-full">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col py-8 px-6 gap-6 bg-[#1c1b1b] dark:bg-[#1c1b1b] shadow-[1px_0_0_0_rgba(255,255,255,0.05)] h-screen w-80 fixed left-0 top-0 z-40 font-manrope antialiased tracking-tight">
+<!-- Brand / User Header -->
+<div class="flex items-center gap-4 mb-8 px-2">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden flex-shrink-0 ghost-border">
+<img alt="Legal professional avatar" class="w-full h-full object-cover" data-alt="Professional portrait of a mature male lawyer in a dark tailored suit against a muted grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpS2hUp4b1Lz82KJGOT1xqlyksh77y0qo1syg9-zBmEiMAY5DhiI4dUeHmJytx36L_4aMUBkntI_kHuBwEFKKJnLd3jvVUZrvXud8VF-ezk7hXTnPPFT9gLVxbxlFGl4AvoG134AFk53WdXo9G2LrUVVZzubFJ7fLpy0P2lGBGIfJPWS-mSadJWIM4Na-d_wZqyDOxBcY1ILL2Gg92XXJdwXpR23PiWEOlnkGwNU1xULXLkTXqNh8B2b3PtiXJcqxO957jhlRfT_k"/>
+</div>
+<div>
+<h1 class="text-[#c6c6c6] font-bold tracking-widest uppercase text-xs">Sovereign Scholar</h1>
+<p class="text-secondary text-[10px] tracking-wide mt-1">Senior Counsel</p>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full btn-liquid-glass text-primary py-3 rounded-full font-semibold text-sm hover:text-white transition-all duration-300 scale-98 active:scale-95 mb-4 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300; font-size: 18px;">add</span>
+            New Inquiry
+        </button>
+<!-- Main Navigation -->
+<div class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-[#c6c6c6]/60 hover:text-[#c6c6c6] hover:bg-[#353534]/20 transition-all duration-300 text-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300; font-size: 20px;">gavel</span>
+                Chambers
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-[#c6c6c6]/60 hover:text-[#c6c6c6] hover:bg-[#353534]/20 transition-all duration-300 text-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300; font-size: 20px;">library_books</span>
+                Research Vault
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-[#c6c6c6]/60 hover:text-[#c6c6c6] hover:bg-[#353534]/20 transition-all duration-300 text-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300; font-size: 20px;">history_edu</span>
+                Inquiry Ledger
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-[#e9c176] font-semibold bg-[#353534]/30 scale-98 transition-transform text-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 400, 'FILL' 1; font-size: 20px;">account_circle</span>
+                Profile Settings
+            </a>
+</div>
+<!-- Footer Navigation -->
+<div class="flex flex-col gap-2 mt-auto border-t border-white/5 pt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-[#c6c6c6]/60 hover:text-[#c6c6c6] hover:bg-[#353534]/20 transition-all duration-300 text-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300; font-size: 18px;">analytics</span>
+                System Status
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-md text-[#c6c6c6]/60 hover:text-[#c6c6c6] hover:bg-[#353534]/20 transition-all duration-300 text-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300; font-size: 18px;">logout</span>
+                Log Out
+            </a>
+</div>
+</nav>
+<!-- Main Canvas Area -->
+<main class="flex-1 md:ml-80 relative min-h-screen flex flex-col">
+<!-- TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center px-12 h-20 bg-[#131313]/80 backdrop-blur-xl fixed top-0 right-0 w-[calc(100%-20rem)] z-50 no-line tonal-transition font-manrope uppercase tracking-widest text-xs font-medium">
+<!-- Left: Navigation Links -->
+<div class="flex items-center gap-8">
+<a class="text-[#c6c6c6]/50 hover:text-[#abc8f5] transition-colors opacity-80 hover:opacity-100 py-2" href="#">Dashboard</a>
+<a class="text-[#c6c6c6]/50 hover:text-[#abc8f5] transition-colors opacity-80 hover:opacity-100 py-2" href="#">Analytics</a>
+<a class="text-[#e9c176] border-b border-[#e9c176] py-2 opacity-100" href="#">Support</a>
+</div>
+<!-- Right: Search & Actions -->
+<div class="flex items-center gap-6 ml-12">
+<!-- Search -->
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/50" style="font-size: 18px; font-variation-settings: 'wght' 300;">search</span>
+<input class="bg-surface-container-lowest border-0 border-b border-outline-variant/30 text-primary placeholder-primary/30 pl-10 pr-4 py-2 text-xs focus:ring-0 focus:border-tertiary transition-colors w-64 uppercase tracking-wider font-label outline-none" placeholder="Search archives..." type="text"/>
+</div>
+<div class="h-4 w-px bg-white/10 mx-2"></div>
+<button class="text-[#c6c6c6]/50 hover:text-[#abc8f5] transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">notifications</span>
+</button>
+<button class="text-[#e9c176] hover:text-[#abc8f5] transition-colors opacity-100">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300, 'FILL' 1;">settings</span>
+</button>
+<button class="px-4 py-2 bg-transparent border border-tertiary/30 text-tertiary rounded-full hover:bg-tertiary/10 transition-colors ml-2">
+                    Premium Access
+                </button>
+<div class="w-8 h-8 rounded-full ml-4 overflow-hidden ghost-border">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Small thumbnail portrait of a mature male lawyer in a dark suit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPDlF_DowF7UdUCUt5a64327oFGaqHNFE8tU9dMgpRX3lqJ8sBX5LnFSYMNJQaLsVTl3KmTcwTdELwLsrkGWDZquHeFFrKMXE2b8WGtlJHXq2TYavhSr0aDjagORMcmc34H4_OzhPmf3HsFW7dMjpcnJ26-O50W9T875lHNXqMRtOumUy-ssmHd4yEwEH1biR6xiW_s5qsfa6hGAkFdm5jzl7z4q1F5sxMDE9IoQlDlst66W4G7CMEwI0h0VYo_jOjypvjeTS9a_s"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="flex-1 pt-32 pb-24 px-8 lg:px-16 max-w-7xl mx-auto w-full flex flex-col gap-12">
+<!-- Page Header -->
+<div class="mb-4">
+<h2 class="font-headline text-display-lg text-primary text-4xl lg:text-5xl font-bold tracking-tight mb-2">Profile Settings</h2>
+<p class="font-body text-primary/60 text-sm max-w-2xl">Manage your credentials, review access logs, and configure security protocols for your Sovereign Scholar instance.</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+<!-- Left Column (Dossier) -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Dossier Card -->
+<div class="glass-panel rounded-xl p-8 flex flex-col items-center text-center relative overflow-hidden group">
+<!-- Decorative gradient blob behind avatar -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-secondary/10 rounded-full blur-3xl -z-10 group-hover:bg-secondary/20 transition-all duration-700"></div>
+<div class="w-32 h-32 rounded-full overflow-hidden mb-6 ghost-border relative z-10 ambient-shadow">
+<img alt="Profile avatar" class="w-full h-full object-cover" data-alt="Detailed portrait of a distinguished male lawyer looking confident, dark lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVlzsoZaIxFFtxMn7a5XzNBdKqcAdttkX9LEm98lQGYfcqr6at-GWzYHnIwrjbwgM46dbss6plUPlYyL7cL3_j7OOixE6LTZiRO8e3wygfin72kMGW1LLQc0fChe72B1GF7e0B_tmLZ7tosjkEQn8yXXRyeu9_HP5UBku0pmispRnhRmR4503EMsO_gLe20KWn89q4fH3IrOOSiaCZRI5Osdg-NZGzYduheKpKQkhEU7mivnahcDefo4P5ncN3X1QjOYO1mBHrWAo"/>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary/10 border border-tertiary/20 text-tertiary text-[10px] font-headline uppercase tracking-widest mb-4">
+<span class="material-symbols-outlined" style="font-size: 14px; font-variation-settings: 'FILL' 1;">verified</span>
+                            Sovereign
+                        </div>
+<h3 class="font-headline text-2xl text-primary font-semibold mb-1">Marcus Vance</h3>
+<p class="font-body text-secondary text-sm mb-4">Senior Counsel</p>
+<p class="font-label text-primary/50 text-xs tracking-wider mb-6">m.vance@chambers.law</p>
+<button class="w-full btn-liquid-glass text-primary hover:text-white py-3 rounded-full text-sm font-semibold tracking-wide">
+                            Update Credentials
+                        </button>
+</div>
+<!-- Security Overview -->
+<div class="bg-surface-container-low rounded-xl p-6 ghost-border">
+<h4 class="font-headline text-sm uppercase tracking-widest text-primary/70 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 16px;">shield_lock</span>
+                            Security Status
+                        </h4>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-body text-sm text-primary/80">Two-Factor Auth</span>
+<span class="text-secondary text-xs bg-secondary/10 px-2 py-1 rounded-sm">Enabled</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body text-sm text-primary/80">Last Login</span>
+<span class="font-label text-xs tracking-wide text-primary/50">Today, 08:42 AM</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body text-sm text-primary/80">Active Sessions</span>
+<span class="font-label text-xs tracking-wide text-primary/50">2 Devices</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Middle & Right Columns (Content) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Settings Sections -->
+<div class="bg-surface-container-low rounded-xl p-8 ghost-border ambient-shadow">
+<h4 class="font-headline text-lg text-primary font-medium mb-6">Data Privacy &amp; Analytics</h4>
+<div class="space-y-6">
+<!-- Toggle Item 1 -->
+<div class="flex items-start justify-between group">
+<div class="max-w-md">
+<h5 class="font-body text-sm text-primary mb-1 group-hover:text-secondary transition-colors">AI Learning Contribution</h5>
+<p class="font-body text-xs text-primary/50 leading-relaxed">Allow anonymized queries to improve the Sovereign Scholar model. Disabling this may limit hyper-personalized suggestions.</p>
+</div>
+<div class="relative w-12 h-6 bg-secondary/20 rounded-full cursor-pointer flex-shrink-0 border border-secondary/30">
+<div class="absolute right-1 top-1 w-4 h-4 bg-secondary rounded-full shadow-sm"></div>
+</div>
+</div>
+<div class="w-full h-px bg-white/5"></div>
+<!-- Toggle Item 2 -->
+<div class="flex items-start justify-between group">
+<div class="max-w-md">
+<h5 class="font-body text-sm text-primary mb-1 group-hover:text-secondary transition-colors">Client Confidentiality Mode</h5>
+<p class="font-body text-xs text-primary/50 leading-relaxed">Enforces strict local-only processing for documents flagged with client metadata. Prevents cloud indexing.</p>
+</div>
+<div class="relative w-12 h-6 bg-surface-container-highest rounded-full cursor-pointer flex-shrink-0 border border-outline-variant/30">
+<div class="absolute left-1 top-1 w-4 h-4 bg-primary/50 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Ledger -->
+<div class="glass-panel rounded-xl p-8 mt-2">
+<div class="flex justify-between items-end mb-6">
+<h4 class="font-headline text-lg text-primary font-medium">Recent Activity</h4>
+<a class="font-label text-xs text-secondary hover:text-tertiary transition-colors uppercase tracking-widest" href="#">View Full Ledger</a>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Ledger Item -->
+<div class="p-4 rounded-lg bg-surface hover:bg-surface-container-highest transition-colors flex items-center justify-between border border-transparent hover:border-outline-variant/10 cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-DEFAULT bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-size: 20px;">description</span>
+</div>
+<div>
+<h6 class="font-body text-sm text-primary group-hover:text-secondary transition-colors">Consumer Rights Analysis</h6>
+<p class="font-label text-[10px] text-primary/40 tracking-wider mt-0.5">Jurisdiction: NY • 14 hours ago</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded bg-surface-container-lowest text-[10px] font-label tracking-widest text-primary/60 border border-outline-variant/20">COMPLETED</span>
+</div>
+<!-- Ledger Item -->
+<div class="p-4 rounded-lg bg-surface hover:bg-surface-container-highest transition-colors flex items-center justify-between border border-transparent hover:border-outline-variant/10 cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-DEFAULT bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit_document</span>
+</div>
+<div>
+<h6 class="font-body text-sm text-primary group-hover:text-tertiary transition-colors">FIR Draft - Property Dispute</h6>
+<p class="font-label text-[10px] text-primary/40 tracking-wider mt-0.5">Drafting • 2 days ago</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded bg-tertiary/10 text-[10px] font-label tracking-widest text-tertiary border border-tertiary/20">IN PROGRESS</span>
+</div>
+</div>
+</div>
+<!-- Danger Zone -->
+<div class="mt-8 pt-8 border-t border-error/10 flex gap-4">
+<button class="flex-1 btn-liquid-glass text-primary/70 hover:text-white py-4 px-6 rounded-full text-sm font-semibold uppercase tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+                            Log Out
+                        </button>
+<button class="flex-1 btn-destructive-glass text-error hover:text-white py-4 px-6 rounded-full text-sm font-semibold uppercase tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">delete_forever</span>
+                            Delete Account
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Simplified Footer Placeholder (per prompt constraints, maintaining aesthetic) -->
+<footer class="w-full relative z-50 mt-auto border-t border-white/5 py-12 px-8 lg:px-16 bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-label text-xs tracking-widest text-primary/40 uppercase">© 2024 LexisCo Legal Solutions</p>
+<div class="flex gap-6">
+<a class="font-label text-xs tracking-widest text-primary/40 hover:text-primary transition-colors uppercase" href="#">Terms</a>
+<a class="font-label text-xs tracking-widest text-primary/40 hover:text-primary transition-colors uppercase" href="#">Privacy</a>
+<a class="font-label text-xs tracking-widest text-primary/40 hover:text-primary transition-colors uppercase" href="#">Ethics</a>
+</div>
+</div>
+</footer>
+</body></html>

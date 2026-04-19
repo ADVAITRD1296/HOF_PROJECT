@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign Up - Sovereign Scholar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#c6c6c6",
+                      "on-tertiary-fixed-variant": "#5d4201",
+                      "error-container": "#93000a",
+                      "primary-container": "#37393a",
+                      "primary": "#c6c6c6",
+                      "surface-variant": "#353534",
+                      "outline": "#8d9199",
+                      "inverse-surface": "#e5e2e1",
+                      "secondary-container": "#2a486e",
+                      "outline-variant": "#43474e",
+                      "surface-container-highest": "#353534",
+                      "surface-dim": "#131313",
+                      "on-primary-fixed-variant": "#454747",
+                      "on-primary": "#2f3131",
+                      "on-surface": "#e5e2e1",
+                      "on-error": "#690005",
+                      "surface-container": "#201f1f",
+                      "on-tertiary": "#412d00",
+                      "background": "#131313",
+                      "on-tertiary-container": "#c29d57",
+                      "on-primary-container": "#a2a3a3",
+                      "error": "#ffb4ab",
+                      "on-background": "#e5e2e1",
+                      "primary-fixed": "#e2e2e2",
+                      "on-secondary-fixed": "#001c39",
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface": "#131313",
+                      "on-secondary-container": "#99b7e3",
+                      "surface-bright": "#393939",
+                      "secondary-fixed": "#d3e3ff",
+                      "tertiary-fixed-dim": "#e9c176",
+                      "tertiary": "#e9c176",
+                      "secondary-fixed-dim": "#abc8f5",
+                      "on-primary-fixed": "#1a1c1c",
+                      "surface-container-low": "#1c1b1b",
+                      "tertiary-fixed": "#ffdea5",
+                      "on-surface-variant": "#c3c6cf",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-high": "#2a2a2a",
+                      "on-tertiary-fixed": "#261900",
+                      "on-secondary-fixed-variant": "#2a486e",
+                      "on-secondary": "#0f3156",
+                      "tertiary-container": "#4c3500",
+                      "inverse-primary": "#5d5f5f",
+                      "inverse-on-surface": "#313030",
+                      "secondary": "#abc8f5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Manrope"
+                      ],
+                      "body": [
+                              "Inter"
+                      ],
+                      "label": [
+                              "Inter"
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-panel {
+            background: rgba(18, 18, 18, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .glass-input {
+            background: rgba(0, 0, 0, 0.6);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-input:focus {
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid rgba(171, 200, 245, 0.8);
+            outline: none;
+        }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #0e0e0e inset !important;
+            -webkit-text-fill-color: #e5e2e1 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body min-h-screen flex flex-col antialiased selection:bg-secondary-container selection:text-on-secondary-container relative">
+<main class="flex-grow flex flex-col items-center justify-center relative w-full overflow-hidden py-12" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCvcy8guUhwabn2-cNw03C3WkpwME_e5aK_K8fl8HfLI5n67o-0itBvlVIvMJWzI3Q2E3tNmok6yGQuyGjFJOXGqB8vVA80flG2mLrQgQFOjE9Yg_0CtqlR4XQBNR847ovhUHVP8rsaPEk8Yso9XHlRsZHs2f6SuzfCyBj1fJ8YSafdMJZ9wU8UKzjGwNR_FhZGsxFFu9ibKgpLI3VUizc3gzb0AbkVKlrMvdrtPH7Cuo-_90xJmQpaCcMoqnCTQL4MzJz9-tDBMN4'); background-size: cover; background-position: center;">
+<div class="absolute inset-0 bg-surface/80 backdrop-blur-sm z-0"></div>
+<div class="relative z-10 w-full max-w-md mx-auto p-12 glass-panel rounded-[2rem] border border-outline-variant/30 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center">
+<div class="mb-10 flex flex-col items-center gap-4 w-full">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest flex items-center justify-center border border-outline-variant/30">
+<span class="material-symbols-outlined text-4xl text-primary font-light" data-icon="account_balance" data-weight="fill" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<h1 class="font-headline text-3xl font-extrabold tracking-tighter text-primary">Sovereign Scholar</h1>
+<p class="font-body text-sm text-on-surface-variant tracking-wide uppercase">Authority through Intelligence</p>
+</div>
+<div class="text-center w-full mb-8">
+<h2 class="font-headline text-2xl font-bold text-primary tracking-tight mb-2">Create Your Account</h2>
+</div>
+<form class="w-full flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label text-xs tracking-wider text-on-surface-variant uppercase" for="fullName">Full Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">person</span>
+<input class="w-full glass-input text-primary font-body text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 placeholder:text-on-surface-variant/70 border-0 focus:ring-0" id="fullName" placeholder="Enter full name" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label text-xs tracking-wider text-on-surface-variant uppercase" for="email">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="mail">mail</span>
+<input class="w-full glass-input text-primary font-body text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 placeholder:text-on-surface-variant/70 border-0 focus:ring-0" id="email" placeholder="scholar@lexisco.com" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label text-xs tracking-wider text-on-surface-variant uppercase" for="phone">Phone Number</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">phone</span>
+<input class="w-full glass-input text-primary font-body text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 placeholder:text-on-surface-variant/70 border-0 focus:ring-0" id="phone" placeholder="(555) 000-0000" type="tel"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label text-xs tracking-wider text-on-surface-variant uppercase" for="password">Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="lock">lock</span>
+<input class="w-full glass-input text-primary font-body text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 placeholder:text-on-surface-variant/70 border-0 focus:ring-0" id="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label text-xs tracking-wider text-on-surface-variant uppercase" for="confirmPassword">Confirm Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">lock_reset</span>
+<input class="w-full glass-input text-primary font-body text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 placeholder:text-on-surface-variant/70 border-0 focus:ring-0" id="confirmPassword" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<button class="w-full mt-4 bg-primary text-on-primary font-headline font-bold text-sm py-4 rounded-full hover:bg-primary-fixed-dim transition-colors duration-300 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(198,198,198,0.1)]" type="button">
+                    Establish Authority
+                    <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<div class="w-full flex items-center gap-4 my-8">
+<div class="flex-grow h-px bg-surface-container-highest"></div>
+<span class="font-label text-xs text-on-surface-variant uppercase tracking-wider">Or</span>
+<div class="flex-grow h-px bg-surface-container-highest"></div>
+</div>
+<button class="w-full glass-panel border border-outline-variant/30 text-primary font-body text-sm py-4 rounded-full hover:bg-surface-container-highest transition-colors duration-300 flex items-center justify-center gap-3" type="button">
+<svg aria-hidden="true" class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M12.0003 4.75C13.7703 4.75 15.3553 5.36 16.6053 6.54998L20.0303 3.125C17.9503 1.19 15.2353 0 12.0003 0C7.31028 0 3.25527 2.69 1.28027 6.60998L5.27028 9.70498C6.21528 6.86 8.87028 4.75 12.0003 4.75Z" fill="#EA4335"></path>
+<path d="M23.49 12.275C23.49 11.49 23.415 10.73 23.3 10H12V14.51H18.47C18.18 15.99 17.34 17.25 16.08 18.1L19.945 21.1C22.2 19.01 23.49 15.92 23.49 12.275Z" fill="#4285F4"></path>
+<path d="M5.26498 14.2949C5.02498 13.5699 4.88501 12.7999 4.88501 11.9999C4.88501 11.1999 5.01998 10.4299 5.26498 9.7049L1.275 6.60986C0.46 8.22986 0 10.0599 0 11.9999C0 13.9399 0.46 15.7699 1.28 17.3899L5.26498 14.2949Z" fill="#FBBC05"></path>
+<path d="M12.0004 24.0001C15.2404 24.0001 17.9654 22.935 19.9454 21.095L16.0804 18.095C15.0054 18.82 13.6204 19.245 12.0004 19.245C8.8704 19.245 6.21537 17.135 5.26537 14.29L1.27539 17.385C3.25539 21.31 7.3104 24.0001 12.0004 24.0001Z" fill="#34A853"></path>
+</svg>
+                Authenticate via Google
+            </button>
+<div class="mt-10 text-center w-full">
+<p class="font-body text-sm text-on-surface-variant">Already have an account? <a class="text-tertiary font-medium hover:text-tertiary-fixed transition-colors ml-1 border-b border-transparent hover:border-tertiary-fixed" href="#">Sign In</a></p>
+</div>
+</div>
+<p class="text-center mt-8 font-label text-[10px] uppercase tracking-[0.2em] text-outline-variant relative z-10 pb-8">
+                Confidential &amp; Proprietary Protocol
+            </p>
+</main>
+</body></html>
