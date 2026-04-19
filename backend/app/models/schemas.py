@@ -165,3 +165,23 @@ class AdminLawyerApprovalRequest(BaseModel):
 class PDFRequest(BaseModel):
     content: str
     filename: Optional[str] = "legal_document"
+
+# ── Location Feature Models ────────────────────────────────────────────────────
+
+class NearbyPlacesRequest(BaseModel):
+    query: str = Field(..., description="User query containing location")
+
+class OSMPlace(BaseModel):
+    name: str
+    address: str
+    latitude: float
+    longitude: float
+    distance_km: float
+    map_link: str
+
+class NearbyPlacesResponse(BaseModel):
+    location_detected: Optional[str] = None
+    requires_location_input: bool = False
+    police_stations: List[OSMPlace] = Field(default_factory=list)
+    courts: List[OSMPlace] = Field(default_factory=list)
+    legal_services: List[OSMPlace] = Field(default_factory=list)
