@@ -253,16 +253,14 @@ export const api = {
     }
   },
   
-  async getLocationGuidance(city: string, issueType: string = 'default'): Promise<any> {
+  async getNearbyLegalServices(query: string): Promise<any> {
     try {
-      const response = await axiosInstance.post('/guidance/location-only', {
-        city,
-        query: issueType, // Backend infers issue type from query keywords
-        language: 'en'
+      const response = await axiosInstance.post('/location/get-nearby-legal-services', {
+        query
       });
       return response.data;
     } catch (error) {
-      console.error("API Error (getLocationGuidance):", error);
+      console.error("API Error (getNearbyLegalServices):", error);
       throw error;
     }
   },
