@@ -3,13 +3,27 @@ import zipfile
 import csv
 import httpx
 from loguru import logger
-from kaggle.api.kaggle_api_extended import KaggleApi
 from app.core.config import settings
 
 class StreamIngestService:
     def __init__(self):
-        self.api = KaggleApi()
-        self.api.authenticate()
+        self.api = None
+        self._authenticated = False
+
+    def _ensure_authenticated(self):
+        """Lazy-load and authenticate Kaggle API."""
+        if not self._authenticated:
+            try:
+                from kaggle.api.kaggle_api_extended import KaggleApi
+                self.api = KaggleApi()
+                self.api.authenticate()
+                self._authenticated = True
+                logger.info("Kaggle API authenticated successfully.")
+            except Exception as e:
+                logger.warning(f"Kaggle authentication failed: {e}. In-memory streaming will not be available.")
+                self.api = None
+                self._authenticated = False
+        return self._authenticated
 
     async def stream_and_index_dataset(self, dataset_slug: str, type: str = "statute"):
         """
@@ -20,6 +34,9 @@ class StreamIngestService:
         
         try:
             # 1. Get the download URL & Auth
+            if not self._ensure_authenticated():
+                return {"status": "error", "message": "Kaggle authentication failed. Check credentials."}
+
             owner, dataset_name = dataset_slug.split('/')
             url = f"https://www.kaggle.com/api/v1/datasets/download/{owner}/{dataset_name}"
             
