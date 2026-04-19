@@ -131,6 +131,29 @@ VECTOR_DB=faiss  # or pinecone
 
 ---
 
+## 🚀 Extended Backend Features (New)
+
+### 1. Shareable Case Card
+- **Endpoint**: `POST /api/case-card/generate`
+- **Purpose**: Generates a structured JSON "case card" from a legal summary, including applicable laws and action steps. Provides a unique `shareable_link`.
+- **Retrieval**: `GET /api/case-card/{card_id}` (Publicly accessible).
+
+### 2. Deadline Calculator
+- **Endpoint**: `POST /api/deadline/calculate`
+- **Purpose**: Calculates Indian law limitation periods for common case types (Consumer, FIR, Civil, RTI, NI Act, Labour).
+- **Output**: Returns `filing_deadline`, `days_remaining`, and a `warning_status` (Safe, Urgent, Critical, Expired).
+
+### 3. Case Strength Analyzer
+- **Endpoint**: `POST /api/case-strength/analyze`
+- **Purpose**: Uses LLM + RAG to evaluate the strength of a case based on legal merit, evidence, documentation, and witnesses.
+- **Output**: Detailed scoring and improvement recommendations.
+
+### 4. Journey Tracker
+- **Endpoints**: `POST /api/journey/create`, `POST /api/journey/{id}/update`, `GET /api/journey/{id}`
+- **Purpose**: Manages a user's legal lifecycle with predefined milestones for Consumer Complaints, FIRs, and RTIs.
+
+---
+
 ## 🎯 Hackathon — AI/ML Track
 
 **Why LexisCo stands out:**
