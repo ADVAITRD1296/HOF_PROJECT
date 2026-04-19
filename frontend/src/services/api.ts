@@ -134,16 +134,20 @@ export const api = {
         user_query: query || "general legal help",
         latitude: lat || 28.6139,
         longitude: lon || 77.2090,
-        radius_km: 50 // localized search
+        radius_km: 25.0 // Tighter proximity for "Near Me" results
       });
 
-      return response.data.map((l: any) => ({
+      const lawyers: any[] = response.data;
+      return lawyers.map(l => ({
         id: l.id,
         name: l.full_name,
         specialization: l.practice_areas.join(', '),
         rating: 4.8, 
-        available: l.status === 'Active' || l.status === 'Approved',
-        distance: l.distance_km ? `${l.distance_km.toFixed(1)} km` : undefined
+        available: l.status === 'Active' || l.status === 'Approved' || l.status === 'Pending',
+        distance: l.distance_km ? `${l.distance_km.toFixed(1)} km` : undefined,
+        email: l.email,
+        phone: l.phone,
+        address: l.office_address
       }));
     } catch (error) {
       console.warn("Backend /lawyers/match failed, using mock data", error);

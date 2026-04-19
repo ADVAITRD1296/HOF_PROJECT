@@ -61,6 +61,9 @@ export interface Lawyer {
   rating: number;
   available: boolean;
   distance?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
 }
 
 export interface DocumentResult {
@@ -164,20 +167,26 @@ export const mockLawyers: Lawyer[] = [
     name: "Adv. Sanjay Verma",
     specialization: "Consumer Rights, Civil Law",
     rating: 4.8,
-    available: true
+    available: true,
+    email: "sanjay.verma@lexisco.com",
+    phone: "+91 98765 43210"
   },
   {
     id: "l2",
     name: "Adv. Priya Sharma",
     specialization: "Cyber Law, Fraud",
     rating: 4.9,
-    available: true
+    available: true,
+    email: "priya.law@lexisco.com",
+    phone: "+91 87654 32109"
   },
   {
     id: "l3",
     name: "Adv. Rajesh Kumar",
     specialization: "Property, Tenant Disputes",
     rating: 4.5,
-    available: false
+    available: false,
+    email: "rajesh.kumar@lexisco.com",
+    phone: "+91 76543 21098"
   }
 ];

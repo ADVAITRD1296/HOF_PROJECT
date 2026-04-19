@@ -217,14 +217,19 @@ class AuthService:
                     user_resp = self._supabase.table("users").select("id").eq("email", email).execute()
                     if user_resp.data:
                         uid = user_resp.data[0]["id"]
+                        logger.info(f"Found user ID {uid} for {email}")
                         # 2. Verify via Admin API
                         self._supabase.auth.admin.update_user_by_id(uid, {"email_confirm": True})
+                        logger.info(f"Admin API: Successfully confirmed email for {uid}")
                         # 3. Update public table
                         self._supabase.table("users").update({"email_verified": True}).eq("id", uid).execute()
+                        logger.info(f"Public Table: Updated verification status for {uid}")
+                        
                         logger.info(f"Recovery successful for {email}. Re-attempting login...")
                         # 4. Retry login
                         resp = self._supabase.auth.sign_in_with_password({"email": email, "password": password})
                         if resp.user:
+                             logger.info(f"Success: User {email} logged in after auto-verification.")
                              return {
                                 "status": "success", 
                                 "message": "Login successful (Auto-Verified)", 
@@ -235,12 +240,16 @@ class AuthService:
                                 },
                                 "session": resp.session.access_token if resp.session else None
                             }
+                    else:
+                        logger.warning(f"User {email} not found in public.users table for recovery.")
                 except Exception as recovery_err:
                     logger.error(f"Auto-verification recovery failed: {recovery_err}")
                 
                 return {
                     "status": "success", 
-                    "message": "Protocol Updated: Your email has been auto-verified. Please click 'Sign In' again to enter.",
+                    "message": "Security Protocol Updated: Your identity has been verified. Please click 'Sign In' again to enter the secure dashboard.",
                     "recoverable": True
                 }
+            
+            logger.error(f"Login failed for {email}: {error_msg}")
             return {"status": "error", "message": f"Login failed: {str(e)}"}

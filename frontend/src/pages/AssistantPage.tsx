@@ -81,10 +81,11 @@ export const AssistantPage: React.FC = () => {
       if (!aiResponse) return;
       const { user } = state;
       if (!user) {
-        alert("Please sign in to start a case.");
+        alert("Please sign in to your LexisCo account to initialize a formal case repo.");
         return;
       }
       
+      setIsLoading(true); // Show progress overlay
       try {
         await api.createCase({
           user_id: user.id,
@@ -94,13 +95,16 @@ export const AssistantPage: React.FC = () => {
             law: aiResponse.law,
             strength: aiResponse.strength,
             analysis: aiResponse.detailed_analysis,
-            history: activeChatHistory // Persist full chat transcript
+            history: activeChatHistory
           }
         });
-        alert("Case initialized successfully. Navigating to repository...");
+        alert("Case initialization successful! Access your case repository in the dashboard.");
         navigate('/dashboard/cases');
-      } catch (e) {
+      } catch (e: any) {
         console.error("Failed to start case", e);
+        alert(`Failed to initialize case: ${e.message || 'Check your network connection'}`);
+      } finally {
+        setIsLoading(false);
       }
     }
   };

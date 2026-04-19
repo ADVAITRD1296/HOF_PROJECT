@@ -43,9 +43,21 @@ Respond in this EXACT JSON structure:
   "steps": [
     {{
       "step_number": 1,
-      "title": "<title in {language}>",
-      "description": "<explanation in {language}>",
-      "action_required": "<action in {language}>"
+      "title": "<Major Step 1 in {language}>",
+      "description": "<detailed protocol explanation in {language}>",
+      "action_required": "<mandatory action in {language}>"
+    }},
+    {{
+      "step_number": 2,
+      "title": "<Major Step 2 in {language}>",
+      "description": "<detailed protocol explanation in {language}>",
+      "action_required": "<mandatory action in {language}>"
+    }},
+    {{
+      "step_number": 3,
+      "title": "<Major Step 3 in {language}>",
+      "description": "<detailed protocol explanation in {language}>",
+      "action_required": "<mandatory action in {language}>"
     }}
   ],
   "citations": [
@@ -70,7 +82,7 @@ Respond in this EXACT JSON structure:
   "disclaimer": "This is AI-generated legal guidance based on retrieved documents, not legal advice. Please consult a qualified lawyer for your specific situation."
 }}
 
-Respond ONLY with JSON. Ensure the 'precedents' list contains exactly 5 items based on the HISTORICAL CASE section of the context.
+Respond ONLY with JSON. Ensure the 'steps' list contains at least 3-5 distinct, chronological tactical actions. Ensure the 'precedents' list contains exactly 5 items based on the HISTORICAL CASE section of the context.
 Respond ONLY with the JSON. No markdown. No extra text.
 """
 

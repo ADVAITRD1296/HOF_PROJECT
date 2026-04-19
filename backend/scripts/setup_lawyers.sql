@@ -49,10 +49,10 @@ alter table contact_logs enable row level security;
 
 -- Create spatial matching RPC
 create or replace function find_nearby_lawyers(
-  user_lat float,
-  user_lng float,
-  radius_km float,
-  case_type text
+  u_lat float,
+  u_lng float,
+  r_km float,
+  c_type text
 )
 returns table (
   id uuid,
@@ -83,12 +83,21 @@ as $$
     l.consultation_fee,
     l.status,
     -- Calculate distance in kilometers using PostGIS
-    ST_Distance(l.location, ST_SetSRID(ST_MakePoint(user_lng, user_lat), 4326)::geography) / 1000.0 as distance_km
+    ST_Distance(l.location, ST_SetSRID(ST_MakePoint(u_lng, u_lat), 4326)::geography) / 1000.0 as distance_km
   from lawyers l
   where 
+    -- Filter by status: Approved or Pending for dev
     l.status in ('Approved', 'Pending')
-    and ST_DWithin(l.location, ST_SetSRID(ST_MakePoint(user_lng, user_lat), 4326)::geography, radius_km * 1000)
-    -- If case_type is 'All' or empty, ignore filter, otherwise check array
-    and (case_type = 'All' or case_type = '' or case_type = any(l.practice_areas))
+    -- Filter by distance
+    and ST_DWithin(l.location, ST_SetSRID(ST_MakePoint(u_lng, u_lat), 4326)::geography, r_km * 1000)
+    -- If c_type is 'All' or empty, ignore filter, otherwise check array (case-insensitive)
+    and (
+      c_type = 'All' 
+      or c_type = '' 
+      or exists (
+        select 1 from unnest(l.practice_areas) p 
+        where lower(p) = lower(c_type)
+      )
+    )
   order by distance_km asc;
 $$;

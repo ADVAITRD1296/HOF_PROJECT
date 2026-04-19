@@ -100,8 +100,9 @@ class RAGService:
         """
         Retrieves context from multiple sources:
         1. Local Vector DB (Statutes)
-        2. Local Vector DB (Historical Case Precedents)
-        3. Live Web Search (Amendments/Recent Changes)
+        2. Local Vector DB (Historical Case Precedents - Semantic)
+        3. SearchService (Curated/Verified Indian Precedents - DeepRelevance)
+        4. Live Web Search (Amendments/Recent Changes)
         """
         # 1. Local Statutes
         local_statutes = self._retrieve_context(query, doc_type="statute")
@@ -110,14 +111,21 @@ class RAGService:
             for d in local_statutes
         ])
         
-        # 2. Historical Case Examples (Semantic Retrieval)
-        local_cases = self._retrieve_context(query, doc_type="case", top_k=5)
-        case_context = "\n".join([
-            f"HISTORICAL CASE: {d.get('title')} ({d.get('section', 'N/A')})\nSummary: {d.get('chunk_text', '')}"
+        # 2. Historical Case Examples (Local Vector Retrieval)
+        local_cases = self._retrieve_context(query, doc_type="case", top_k=3)
+        vector_case_context = "\n".join([
+            f"HISTORICAL CASE (VECTOR): {d.get('title')} ({d.get('section', 'N/A')})\nSummary: {d.get('chunk_text', '')}"
             for d in local_cases
         ])
         
-        # 3. Live Updates (Amendments)
+        # 3. Verified Indian Precedents (DeepRelevance Service)
+        verified_cases = await self._search_service.search_similar_cases(query)
+        verified_case_context = "\n".join([
+            f"HISTORICAL CASE (VERIFIED): {c['title']} ({c['citation']})\nSummary: {c['summary']}\nOutcome: {c['outcome']}\nRelevance: {c['relevance']}"
+            for c in verified_cases
+        ])
+        
+        # 4. Live Updates (Amendments)
         amendments = await self._search_service.fetch_latest_amendments()
         amendment_context = "\n".join([
             f"LATEST ENROLLMENT/UPDATE: {a['title']} (Ref: {a['date']})"
@@ -132,7 +140,8 @@ LATEST LEGAL UPDATES/AMENDMENTS:
 {amendment_context}
 
 HISTORICAL CASE EXAMPLES (PRECEDENTS):
-{case_context}
+{vector_case_context}
+{verified_case_context}
 """
 
     async def get_guidance(

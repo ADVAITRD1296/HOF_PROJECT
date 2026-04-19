@@ -10,7 +10,7 @@ import { useAppContext } from '../AppContext';
 export const LawyersPage: React.FC = () => {
   const { aiResponse } = useAppContext();
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
-  const [searchQuery, setSearchQuery] = useState(aiResponse?.issue || '');
+  const [searchQuery, setSearchQuery] = useState(''); // Default to empty for automatic nearby suggestions
   const [isLoading, setIsLoading] = useState(true);
   const [locationStatus, setLocationStatus] = useState<'Detecting' | 'Active' | 'Default'>('Detecting');
   const [userCoords, setUserCoords] = useState<{lat: number, lon: number} | null>(null);
@@ -38,14 +38,19 @@ export const LawyersPage: React.FC = () => {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const coords = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+          console.info("Location detected:", coords);
           setUserCoords(coords);
           fetchLawyers(searchQuery, coords);
         },
-        () => {
+        (error) => {
+          console.error("Location error:", error);
+          setLocationStatus('Default');
           fetchLawyers(searchQuery);
-        }
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
     } else {
+      setLocationStatus('Default');
       fetchLawyers(searchQuery);
     }
   }, []);
@@ -69,10 +74,10 @@ export const LawyersPage: React.FC = () => {
           <div className="flex items-center gap-4">
             <p className="text-muted-foreground font-sans text-sm">Verified legal professionals within your immediate jurisdiction.</p>
             <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest ${
-              locationStatus === 'Active' ? 'bg-[#4ADE80]/5 border-[#4ADE80]/20 text-[#4ADE80]' : 'bg-white/5 border-white/5 text-muted-foreground'
+              locationStatus === 'Active' ? 'bg-[#4ADE80]/10 border-[#4ADE80]/30 text-[#4ADE80]' : 'bg-white/5 border-white/5 text-muted-foreground'
             }`}>
               <MapPin className="w-3 h-3" />
-              {locationStatus === 'Detecting' ? 'Syncing Location...' : locationStatus === 'Active' ? 'Precision Match: On' : 'Default Area'}
+              {locationStatus === 'Detecting' ? 'Scanning Environment...' : locationStatus === 'Active' ? 'Automatic Match: Active' : 'Default Connectivity'}
             </div>
           </div>
         </div>

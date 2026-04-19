@@ -106,8 +106,13 @@ class LawyerService:
             raise Exception("Supabase client not available")
 
         # 1. Use AI to resolve Case Type from user query string
+        # Default to "All" if query is empty or generic to allow broad geolocation suggestions
         case_type = "All"
-        if groq_client:
+        generic_queries = ["", "nearby_all", "general legal help", "find lawyers near me"]
+        
+        should_classify = request.user_query and request.user_query.lower() not in generic_queries
+        
+        if groq_client and should_classify:
             prompt = CASE_CLASSIFICATION_PROMPT.format(query=request.user_query)
             try:
                 chat = groq_client.chat.completions.create(
@@ -117,27 +122,32 @@ class LawyerService:
                     response_format={"type": "json_object"}
                 )
                 res = json.loads(chat.choices[0].message.content)
-                case_type = res.get("category", "")
-                logger.info(f"AI classified query as: {case_type}")
+                case_type = res.get("category", "All")
+                logger.info(f"AI classified query '{request.user_query}' as: {case_type}")
             except Exception as e:
-                logger.warning(f"Failed AI classification, falling back: {e}")
+                logger.warning(f"Failed AI classification, falling back to 'All': {e}")
+        else:
+            logger.info("Using 'All' category for generic or empty query.")
         
         # 2. Call Spatial RPC in Supabase
         try:
-            # find_nearby_lawyers(user_lat, user_lng, radius_km, case_type)
+            # Explicitly pass parameters to ensure match with RPC signature
+            logger.info(f"Calling find_nearby_lawyers at ({request.latitude}, {request.longitude}) radius={request.radius_km}km category={case_type}")
+            
             rpc_response = supabase.rpc("find_nearby_lawyers", {
-                "user_lat": request.latitude,
-                "user_lng": request.longitude,
-                "radius_km": request.radius_km,
-                "case_type": case_type
+                "u_lat": float(request.latitude),
+                "u_lng": float(request.longitude),
+                "r_km": float(request.radius_km),
+                "c_type": str(case_type)
             }).execute()
             
             raw_data = rpc_response.data or []
+            logger.info(f"RPC returned {len(raw_data)} nearby lawyers.")
             return [LawyerProfileResponse(**record) for record in raw_data]
             
         except Exception as e:
             logger.error(f"RPC query error matching lawyers: {e}")
-            raise Exception("Failed to match nearby lawyers")
+            raise Exception(f"Failed to match nearby lawyers: {str(e)}")
 
     async def log_contact(self, request: ContactLogRequest) -> dict:
         supabase = self._load_supabase()
