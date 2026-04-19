@@ -7,14 +7,8 @@ from app.core.config import settings
 
 class StreamIngestService:
     def __init__(self):
-        try:
-            from kaggle.api.kaggle_api_extended import KaggleApi
-            self.api = KaggleApi()
-            self.api.authenticate()
-            logger.info("✅ Kaggle API authenticated successfully.")
-        except Exception as e:
-            logger.warning(f"⚠️ Kaggle authentication failed: {e}. Ingestion features will be disabled.")
-            self.api = None
+        self.api = KaggleApi()
+        self.api.authenticate()
 
     async def stream_and_index_dataset(self, dataset_slug: str, type: str = "statute"):
         """
@@ -25,6 +19,9 @@ class StreamIngestService:
         
         try:
             # 1. Get the download URL & Auth
+            if not self._ensure_authenticated():
+                return {"status": "error", "message": "Kaggle authentication failed. Check credentials."}
+
             owner, dataset_name = dataset_slug.split('/')
             url = f"https://www.kaggle.com/api/v1/datasets/download/{owner}/{dataset_name}"
             
