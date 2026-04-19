@@ -14,12 +14,14 @@ class GuidanceRequest(BaseModel):
     context: Optional[str] = Field(default=None, description="Any additional context")
     doc_type: Optional[str] = Field(default=None, description="Document type: fir | complaint | notice")
     user_details: Optional[Dict[str, Any]] = Field(default=None, description="User-provided personal details for documents")
+    city: Optional[str] = Field(default=None, description="User's city for location-aware guidance (e.g. 'Lucknow')")
 
     class Config:
         json_schema_extra = {
             "example": {
                 "query": "My employer has not paid my salary for 3 months. What can I do?",
                 "language": "en",
+                "city": "Mumbai",
             }
         }
 
@@ -51,6 +53,7 @@ class GuidanceResponse(BaseModel):
         "Please consult a qualified lawyer for critical matters."
     )
     language: str
+    location_guidance: Optional[Dict[str, Any]] = None
 
 
 class DocumentResponse(BaseModel):

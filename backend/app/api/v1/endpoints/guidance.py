@@ -4,11 +4,13 @@ Handles user queries and returns structured step-by-step legal guidance.
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks
-from app.models.schemas import GuidanceRequest, GuidanceResponse
+from fastapi.responses import StreamingResponse
+from app.models.schemas import GuidanceRequest, GuidanceResponse, PDFRequest
 from app.services.rag_service import RAGService
-from loguru import logger
-
+from app.utils.location_helper import get_location_guidance
+from app.utils.pdf_generator import create_legal_pdf
 from app.document_generator import generate_document
+from loguru import logger
 
 router = APIRouter()
 rag_service = RAGService()
@@ -21,6 +23,7 @@ async def ask_legal_question(request: GuidanceRequest):
     - Retrieves relevant legal context via RAG
     - Generates step-by-step guidance using LLM
     - Returns citations, steps, and suggested next actions
+    - Optionally enriches response with location-aware authority guidance
     """
     try:
         logger.info(f"Received query: {request.query[:80]}...")
@@ -29,15 +32,25 @@ async def ask_legal_question(request: GuidanceRequest):
             language=request.language,
             context=request.context,
         )
+
+        # --- Location guidance (fail-safe: never breaks existing response) ---
+        location_guidance = None
+        try:
+            if request.city:
+                location_guidance = get_location_guidance(
+                    city=request.city,
+                    query=request.query,
+                )
+        except Exception:
+            pass  # Always silent — location is optional
+
+        result.location_guidance = location_guidance
         return result
     except Exception as e:
         logger.error(f"Error processing guidance request: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
-from fastapi.responses import StreamingResponse
-from app.models.schemas import GuidanceRequest, GuidanceResponse, PDFRequest
-from app.utils.pdf_generator import create_legal_pdf
 
 @router.post("/generate-document")
 async def generate_legal_document(request: GuidanceRequest):
@@ -60,6 +73,18 @@ async def generate_legal_document(request: GuidanceRequest):
             data=data,
             language=request.language
         )
+        
+        # --- OPTIONAL: Add location guidance (fail-safe, does not affect existing fields) ---
+        try:
+            city = (data.get("location") or data.get("address") or "").split(",")[0].strip()
+            location_guidance = get_location_guidance(
+                city=city,
+                query=request.query,
+                doc_type=request.doc_type
+            )
+            result["location_guidance"] = location_guidance  # None if not found — that's fine
+        except Exception:
+            pass  # Never break existing flow
         
         return result
     except Exception as e:
