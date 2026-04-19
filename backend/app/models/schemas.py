@@ -149,3 +149,6 @@ class AdminLawyerApprovalRequest(BaseModel):
     id: str
     action: str = Field(..., description="approve or reject")
     reason: Optional[str] = None
+class PDFRequest(BaseModel):
+    content: str
+    filename: Optional[str] = "legal_document"
