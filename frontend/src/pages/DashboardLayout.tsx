@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { MessageSquare, Briefcase, Users, Settings, LogOut, Star, Map, Activity } from 'lucide-react';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { FeedbackModal } from '../components/FeedbackModal';
@@ -45,7 +45,7 @@ export const DashboardLayout: React.FC = () => {
       {/* Sidebar */}
       <aside className="w-[240px] flex-shrink-0 flex flex-col border-r border-border/50 bg-black/40 backdrop-blur-xl relative z-20">
         <div className="p-6 pb-8 border-b border-border/50">
-          <span className="text-xl font-bold tracking-widest uppercase font-manrope text-primary">LexisCo.</span>
+          <Link to="/" className="text-xl font-bold tracking-widest uppercase font-manrope text-primary hover:opacity-80 transition-opacity">LexisCo.</Link>
         </div>
         
         <nav className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto">

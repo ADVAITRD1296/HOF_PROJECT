@@ -106,4 +106,22 @@
   --sidebar-accent-foreground: #FAFAFA;
   --sidebar-border: #222222;
   --sidebar-ring: #E8E8E8;
+  
+  /* 3D Hero Variables */
+  --sky-300: 203, 92%, 53%;
+  --gray-300: 0, 0%, 70%;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-long {
+  animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }

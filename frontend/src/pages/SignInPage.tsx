@@ -68,7 +68,7 @@ export const SignInPage: React.FC = () => {
             <div className="w-16 h-16 rounded-xl bg-card flex items-center justify-center border border-border/30 shadow-inner">
               <span className="material-symbols-outlined text-4xl text-primary font-light" style={{ fontVariationSettings: "'FILL' 1" }}>account_balance</span>
             </div>
-            <h1 className="font-manrope text-3xl font-extrabold tracking-tighter text-primary">LexisCo</h1>
+            <Link to="/" className="font-manrope text-3xl font-extrabold tracking-tighter text-primary hover:opacity-80 transition-opacity">LexisCo</Link>
             <p className="font-sans text-sm text-muted-foreground tracking-wide uppercase">The Sovereign Scholar</p>
           </div>
           
