@@ -53,7 +53,12 @@ class CasePrecedent(BaseModel):
 
 class GuidanceResponse(BaseModel):
     query: str
+    issue: str = Field(..., description="Short title of the legal issue")
+    law: str = Field(..., description="Key acts and sections involved")
+    reason: str = Field(..., description="Strategic rationale for the advice")
     summary: str
+    detailed_analysis: str = Field(..., description="Deep architectural analysis of the situation")
+    strength: int = Field(..., description="Numerical confidence score 1-100")
     steps: List[LegalStep]
     citations: List[LegalCitation]
     precedents: List[CasePrecedent] = Field(default_factory=list, description="Exactly 5 similar historical cases")
@@ -136,7 +141,12 @@ class UserRegistrationRequest(BaseModel):
     full_name: str
     phone: str
     email: str
+    password: str = Field(..., min_length=6)
     government_id_url: Optional[str] = None
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
 
 class UserProfileResponse(BaseModel):
     id: str

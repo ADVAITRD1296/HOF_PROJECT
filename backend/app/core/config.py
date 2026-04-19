@@ -47,11 +47,16 @@ class Settings(BaseSettings):
     SMTP_PORT: int = 587
     SMTP_EMAIL: str = ""
     SMTP_PASSWORD: str = "" # Gmail App Password
+    
+    # Kaggle (for ingestion)
+    KAGGLE_USERNAME: str = ""
+    KAGGLE_KEY: str = ""
 
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = False
+        extra = "ignore"
 
 
 settings = Settings()

@@ -17,8 +17,22 @@ create table if not exists lawyers (
   consultation_fee decimal(10,2),
   location geography(point) not null, -- Stores Longitude + Latitude
   status text not null default 'Pending' check (status in ('Pending', 'Approved', 'Rejected')),
+  email_verified boolean default false,
+  id_verified boolean default false,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+-- Create OTPs table for verification
+create table if not exists otps (
+  id uuid primary key default gen_random_uuid(),
+  identifier text not null,
+  code text not null,
+  expires_at timestamp with time zone not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Index for fast lookup by identifier (email)
+create index if not exists idx_otps_identifier on otps(identifier);
 
 -- Turn on Row Level Security (RLS) but allow service_role to bypass it
 alter table lawyers enable row level security;
@@ -72,7 +86,7 @@ as $$
     ST_Distance(l.location, ST_SetSRID(ST_MakePoint(user_lng, user_lat), 4326)::geography) / 1000.0 as distance_km
   from lawyers l
   where 
-    l.status = 'Approved'
+    l.status in ('Approved', 'Pending')
     and ST_DWithin(l.location, ST_SetSRID(ST_MakePoint(user_lng, user_lat), 4326)::geography, radius_km * 1000)
     -- If case_type is 'All' or empty, ignore filter, otherwise check array
     and (case_type = 'All' or case_type = '' or case_type = any(l.practice_areas))

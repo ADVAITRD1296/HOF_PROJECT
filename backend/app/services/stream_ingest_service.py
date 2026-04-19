@@ -3,13 +3,18 @@ import zipfile
 import csv
 import httpx
 from loguru import logger
-from kaggle.api.kaggle_api_extended import KaggleApi
 from app.core.config import settings
 
 class StreamIngestService:
     def __init__(self):
-        self.api = KaggleApi()
-        self.api.authenticate()
+        try:
+            from kaggle.api.kaggle_api_extended import KaggleApi
+            self.api = KaggleApi()
+            self.api.authenticate()
+            logger.info("✅ Kaggle API authenticated successfully.")
+        except Exception as e:
+            logger.warning(f"⚠️ Kaggle authentication failed: {e}. Ingestion features will be disabled.")
+            self.api = None
 
     async def stream_and_index_dataset(self, dataset_slug: str, type: str = "statute"):
         """

@@ -1,103 +1,279 @@
-export interface LegalStep {
-  stepNumber: number;
-  title: string;
-  explanation: string;
-}
+import { axiosInstance } from './axiosInstance';
+import type { 
+  LegalResponse, 
+  DocumentResult, 
+  Case, 
+  Lawyer, 
+  UploadResult,
+} from './mockData';
+import {
+  mockCases,
+  mockLawyers
+} from './mockData';
 
-export interface Law {
-  act: string;
-  section: string;
-  title: string;
-  explanation: string;
-  confidenceScore: number;
-  sourceUrl: string;
-}
+export const api = {
+  async getLegalGuidance(query: string, files?: File[], language: 'en' | 'hi' = 'en', city: string = 'India'): Promise<LegalResponse> {
+    try {
+      const formData = new FormData();
+      formData.append('query', query);
+      formData.append('language', language);
+      formData.append('city', city);
 
-export interface LegalGuidanceResponse {
-  steps: LegalStep[];
-  applicable_laws: Law[];
-  suggested_actions: string[];
-  ai_response: string;
-}
+      if (files && files.length > 0) {
+        files.forEach((file) => {
+          formData.append('files', file);
+        });
+      }
 
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+      const response = await axiosInstance.post('/guidance/ask', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-export const fetchLegalGuidance = async (_query: string, language: 'en' | 'hi'): Promise<LegalGuidanceResponse> => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/ask`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: _query,
-        language: language,
-      }),
-    });
+      const data = response.data;
 
-    if (!response.ok) {
-      throw new Error(`API returned ${response.status}`);
+      // Map Backend (GuidanceResponse) -> Frontend (LegalResponse)
+      return {
+        issue: data.issue || data.query || "Legal Query Analysis",
+        law: data.law || (data.citations?.[0] ? `${data.citations[0].act} - Section ${data.citations[0].section}` : "Relevant Indian Law"),
+        reason: data.reason || data.citations?.[0]?.why_applicable || data.summary,
+        summary: data.summary,
+        detailed_analysis: data.detailed_analysis || data.summary,
+        strength: data.strength || 75,
+        steps: data.steps.map((s: any) => ({
+          step_number: s.step_number,
+          title: s.title,
+          description: s.description,
+          action_required: s.action_required
+        })),
+        next_steps: data.suggested_actions || ["Consult a Lawyer", "Generate Notice"],
+        cases: (data.precedents || []).map((p: any, idx: number) => ({
+          id: `case-${idx}`,
+          title: p.title,
+          year: parseInt(p.citation?.match(/\d{4}/)?.[0] || "2024"),
+          relevance: p.relevance
+        })),
+        location_guidance: data.location_guidance
+      };
+    } catch (error) {
+      console.error("API Error (getLegalGuidance):", error);
+      throw error;
+    }
+  },
+
+  async generateDocument(data: any): Promise<DocumentResult> {
+    try {
+      const response = await axiosInstance.post('/guidance/generate-document', {
+        query: data.details,
+        doc_type: data.type.toLowerCase(),
+        language: "en",
+        user_details: {
+          name: data.name,
+          location: data.location,
+          date: data.date
+        }
+      });
+
+      const result = response.data;
+      return {
+        id: "doc_" + Math.random().toString(36).substr(2, 9),
+        title: result.title || `${data.type} - ${data.name}`,
+        content: result.document,
+        type: data.type as 'FIR' | 'Complaint' | 'Notice'
+      };
+    } catch (error) {
+      console.error("API Error (generateDocument):", error);
+      throw error;
+    }
+  },
+
+  async getCases(userId?: string): Promise<Case[]> {
+    if (!userId) {
+      // Falling back to mocks for UI demonstration if not logged in
+      await new Promise(resolve => setTimeout(resolve, 500));
+      return mockCases;
     }
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Backend unreachable, falling back to mock UI...", error);
-    // Fallback if backend isn't actually running so the UI doesn't break
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          ai_response: language === 'en' 
-            ? "Based on the details you provided, this appears to be a case of online financial fraud. Here is your structured legal action plan."
-            : "आपकी दी गई जानकारी के आधार पर, यह ऑनलाइन वित्तीय धोखाधड़ी का मामला प्रतीत होता है। यहाँ आपकी कानूनी कार्रवाई योजना है।",
-          steps: [
-            { stepNumber: 1, title: language === 'en' ? "Preserve Evidence" : "सबूत सुरक्षित रखें", explanation: language === 'en' ? "Take screenshots of all chats, payment receipts, and profiles." : "सभी चैट, भुगतान रसीदें और प्रोफ़ाइल के स्क्रीनशॉट लें।" },
-            { stepNumber: 2, title: language === 'en' ? "Call 1930" : "1930 पर कॉल करें", explanation: language === 'en' ? "Immediately call the Cyber Crime Helplne to freeze the transaction." : "लेनदेन को फ्रीज करने के लिए तुरंत साइबर क्राइम हेल्पलाइन पर कॉल करें।" },
-            { stepNumber: 3, title: language === 'en' ? "Register Complaint" : "शिकायत दर्ज करें", explanation: language === 'en' ? "File a complaint on cybercrime.gov.in." : "cybercrime.gov.in पर शिकायत दर्ज करें।" },
-          ],
-          applicable_laws: [{
-            act: "Bharatiya Nyaya Sanhita (BNS)",
-            section: "318(4)",
-            title: "Cheating and dishonestly inducing delivery of property",
-            explanation: "This section applies when someone deceives you intentionally to deliver property (like money in an online scam). Since you paid money for goods never delivered, this constitutes a prima facie case.",
-            confidenceScore: 95,
-            sourceUrl: "https://indiankanoon.org"
-          }],
-          suggested_actions: ["Generate FIR Draft →", "Find Cyber Lawyer →", "Call 1930 Now →"]
-        });
-      }, 1000);
-    });
-  }
-};
-
-export const generateDocument = async (type: string, userDetails: any) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/generate-document`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: userDetails.details || "",
-        doc_type: type,
-        user_details: userDetails,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`API returned ${response.status}`);
+    try {
+      const response = await axiosInstance.get(`/cases/${userId}`);
+      return response.data.map((c: any) => ({
+        id: c.id,
+        title: c.title || "Untitled Intelligence",
+        status: c.status || 'Action pending',
+        description: c.description,
+        strength: c.metadata?.strength || 70,
+        law: c.metadata?.law || "Indian Statutes",
+        lastUpdated: c.created_at // Match interface
+      }));
+    } catch (error) {
+      console.warn("Backend /cases failed, using mock data", error);
+      return mockCases;
     }
+  },
 
-    return await response.json();
-  } catch (error) {
-    console.warn("Backend unreachable, falling back to mock generator...", error);
-    return new Promise<{ document_text: string; pdf_url: string }>((resolve) => {
-      setTimeout(() => {
-        resolve({
-          document_text: `[DRAFT - ${type.toUpperCase()}]\n\nTo,\nThe Station House Officer,\nCyber Crime Police Station,\n\nSubject: Complaint regarding online financial fraud.\n\nRespected Sir/Madam,\n\nI am writing to report a fraudulent incident...\n\nDetails provided: ${userDetails.details}\n\nPlease take immediate legal action under applicable laws.`,
-          pdf_url: "#"
-        });
-      }, 1500);
-    });
+  async getLawyers(query?: string, lat?: number, lon?: number): Promise<Lawyer[]> {
+    try {
+      const response = await axiosInstance.post('/lawyers/match', {
+        user_query: query || "general legal help",
+        latitude: lat || 28.6139,
+        longitude: lon || 77.2090,
+        radius_km: 50 // localized search
+      });
+
+      return response.data.map((l: any) => ({
+        id: l.id,
+        name: l.full_name,
+        specialization: l.practice_areas.join(', '),
+        rating: 4.8, 
+        available: l.status === 'Active' || l.status === 'Approved',
+        distance: l.distance_km ? `${l.distance_km.toFixed(1)} km` : undefined
+      }));
+    } catch (error) {
+      console.warn("Backend /lawyers/match failed, using mock data", error);
+      return mockLawyers;
+    }
+  },
+
+  async registerLawyer(data: any): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/lawyers/register', data);
+      return response.data;
+    } catch (error) {
+      console.error("API Error (registerLawyer):", error);
+      throw error;
+    }
+  },
+
+  async uploadFile(file: File): Promise<UploadResult> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await axiosInstance.post('/documents/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      return {
+        filename: response.data.filename,
+        size: response.data.size,
+        secured: true,
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      console.error("API Error (uploadFile):", error);
+      throw error;
+    }
+  },
+
+  async login(email: string, password: string): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/auth/login', {
+        email,
+        password
+      });
+      return response.data;
+    } catch (error) {
+      console.error("API Error (login):", error);
+      throw error;
+    }
+  },
+
+  async register(data: any): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/auth/register', {
+        full_name: data.fullName,
+        email: data.email,
+        phone: data.phone || "0000000000",
+        password: data.password
+      });
+      return response.data;
+    } catch (error) {
+      console.error("API Error (register):", error);
+      throw error;
+    }
+  },
+
+  async listDocuments(): Promise<any[]> {
+    try {
+      const response = await axiosInstance.get('/documents/list');
+      return response.data.documents || [];
+    } catch (error) {
+      console.warn("Backend /documents/list failed, returning empty", error);
+      return [];
+    }
+  },
+  async downloadPDF(content: string, filename: string): Promise<void> {
+    try {
+      const response = await axiosInstance.post('/guidance/download-pdf', {
+        content,
+        filename
+      }, {
+        responseType: 'blob'
+      });
+      
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${filename}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("API Error (downloadPDF):", error);
+      throw error;
+    }
+  },
+
+  async createCase(data: { user_id: string; title: string; description: string; metadata?: any }): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/cases/', data);
+      return response.data;
+    } catch (error) {
+      console.error("API Error (createCase):", error);
+      throw error;
+    }
+  },
+  
+  async getLocationGuidance(city: string, issueType: string = 'default'): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/guidance/location-only', {
+        city,
+        query: issueType, // Backend infers issue type from query keywords
+        language: 'en'
+      });
+      return response.data;
+    } catch (error) {
+      console.error("API Error (getLocationGuidance):", error);
+      throw error;
+    }
+  },
+
+  async sendLawyerOTP(email: string): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/lawyers/send-otp', {
+        identifier: email,
+        method: 'email'
+      });
+      return response.data;
+    } catch (error) {
+      console.error("API Error (sendLawyerOTP):", error);
+      throw error;
+    }
+  },
+
+  async verifyLawyerOTP(email: string, code: string): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/lawyers/verify-otp', {
+        identifier: email,
+        code: code
+      });
+      return response.data;
+    } catch (error) {
+      console.error("API Error (verifyLawyerOTP):", error);
+      throw error;
+    }
   }
 };

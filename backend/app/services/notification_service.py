@@ -22,7 +22,8 @@ class NotificationService:
             msg['Subject'] = subject
             msg.attach(MIMEText(body_html, 'html'))
 
-            with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
+            # Use explicit timeout to prevent hanging during connect
+            with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=10) as server:
                 server.starttls()
                 server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
                 server.send_message(msg)

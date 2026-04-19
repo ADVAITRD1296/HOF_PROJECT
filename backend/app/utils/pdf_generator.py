@@ -30,20 +30,22 @@ def create_legal_pdf(content: str) -> io.BytesIO:
         pdf = LegalPDF()
         pdf.add_page()
         
-        # Set content font
+        # Set primary font
         pdf.set_font("helvetica", size=12)
         
-        # Replace non-latin-1 characters with a space or question mark
-        # This prevents the font-range error
-        clean_text = content.encode('latin-1', 'replace').decode('latin-1')
+        # Helper to clean text for Latin-1 (FPDF limitation)
+        # Replacing common problematic characters from LLM output
+        clean_text = content.replace('’', "'").replace('‘', "'").replace('“', '"').replace('”', '"').replace('–', '-')
         
-        # Write content
-        pdf.multi_cell(0, 10, txt=clean_text)
+        # Fallback for truly non-latin characters
+        safe_text = clean_text.encode('latin-1', 'replace').decode('latin-1')
+        
+        # Write content with better spacing
+        pdf.multi_cell(0, 8, txt=safe_text)
         
         # Output to byte stream
-        pdf_output = io.BytesIO()
         pdf_bytes = pdf.output()
-        pdf_output.write(pdf_bytes)
+        pdf_output = io.BytesIO(pdf_bytes)
         pdf_output.seek(0)
         
         return pdf_output

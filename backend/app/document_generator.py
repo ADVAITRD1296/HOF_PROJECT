@@ -229,8 +229,12 @@ async def generate_document(doc_type: Optional[str], data: Dict[str, Any], langu
     """
     # 1. Normalize Document Type
     doc_type = (doc_type or data.get("type") or "FIR").upper()
+    if doc_type == "NOTICE":
+        doc_type = "LEGAL_NOTICE"
+    elif doc_type == "COMPLAINT":
+        doc_type = "CONSUMER_COMPLAINT"
     
-    # 2. Normalize Fields
+    # 2. Normalize Fields (Accept both frontend simple names and formal backend names)
     complainantName = (
         data.get("complainantName")
         or data.get("name")
@@ -239,6 +243,7 @@ async def generate_document(doc_type: Optional[str], data: Dict[str, Any], langu
     )
     description = (
         data.get("description")
+        or data.get("details")
         or data.get("query")
         or data.get("incident")
         or "Incident reported by user."
@@ -246,6 +251,11 @@ async def generate_document(doc_type: Optional[str], data: Dict[str, Any], langu
     location = (
         data.get("location")
         or data.get("address")
+        or "Not Provided"
+    )
+    dateOfIncident = (
+        data.get("dateOfIncident")
+        or data.get("date")
         or "Not Provided"
     )
     
@@ -256,7 +266,7 @@ async def generate_document(doc_type: Optional[str], data: Dict[str, Any], langu
         "fatherName": data.get("fatherName") or "Not Provided",
         "address": data.get("address") or location,
         "phone": data.get("phone") or "Not Provided",
-        "dateOfIncident": data.get("dateOfIncident") or "Not Provided",
+        "dateOfIncident": dateOfIncident,
         "timeOfIncident": data.get("timeOfIncident") or "Not Provided",
         "accusedName": data.get("accusedName") or "Unknown Suspect",
         "evidence": data.get("evidence") or "Not Provided",

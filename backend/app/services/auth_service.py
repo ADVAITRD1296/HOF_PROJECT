@@ -11,8 +11,35 @@ from app.services.notification_service import NotificationService
 class AuthService:
     def __init__(self):
         self._supabase: Optional[Client] = None
-        if settings.SUPABASE_URL and settings.SUPABASE_SERVICE_KEY:
-            self._supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY)
+        supabase_url = settings.SUPABASE_URL
+        supabase_key = settings.SUPABASE_SERVICE_KEY or settings.SUPABASE_KEY
+        
+        if supabase_url and supabase_key:
+            try:
+                from supabase import ClientOptions
+                # Set strict timeouts to prevent infinite hangs
+                options = ClientOptions(
+                    postgrest_client_timeout=5,
+                    storage_client_timeout=5
+                )
+                self._supabase = create_client(supabase_url, supabase_key, options=options)
+            except Exception as e:
+                logger.error(f"Failed to initialize Supabase client: {e}")
+        else:
+            logger.warning("Supabase configuration incomplete.")
+
+    async def _check_reachability(self) -> bool:
+        """Fast check if the Supabase URL is reachable."""
+        if not self._supabase: return False
+        try:
+            async with httpx.AsyncClient(timeout=3.0) as client:
+                # We add the apikey header to get a 200, but even a 401/403 proves connectivity
+                headers = {"apikey": self._supabase.supabase_key} if self._supabase.supabase_key else {}
+                resp = await client.get(f"{self._supabase.supabase_url}/auth/v1/health", headers=headers)
+                return resp.status_code < 500
+        except Exception as e:
+            logger.warning(f"Supabase reachability check failed: {e}")
+            return False
 
     async def send_otp(self, identifier: str, method: str = "email") -> dict:
         """
@@ -25,12 +52,18 @@ class AuthService:
         expires_at = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=5)
         
         try:
-            # 1. Store in DB
-            self._supabase.table("otps").insert({
-                "identifier": identifier,
-                "code": code,
-                "expires_at": expires_at.isoformat()
-            }).execute()
+            # 1. Store in DB (Attempt)
+            if self._supabase:
+                try:
+                    self._supabase.table("otps").insert({
+                        "identifier": identifier,
+                        "code": code,
+                        "expires_at": expires_at.isoformat()
+                    }).execute()
+                except Exception as db_err:
+                    logger.warning(f"Failed to store OTP in DB: {db_err}. Continuing with delivery.")
+            else:
+                logger.warning("Supabase client not initialized. Skipping OTP record insertion.")
             
             # 2. Attempt Delivery (Email Only)
             html = f"<h3>Verification Code</h3><p>Your LexisCo code is: <b>{code}</b></p>"
@@ -51,6 +84,10 @@ class AuthService:
     async def verify_otp(self, identifier: str, code: str) -> bool:
         """Checks if code matches and is valid."""
         try:
+            if not self._supabase:
+                logger.warning("Supabase not initialized. Bypassing OTP check for demo/debug.")
+                return settings.DEBUG
+
             now = datetime.datetime.now(datetime.timezone.utc).isoformat()
             response = self._supabase.table("otps") \
                 .select("*") \
@@ -80,3 +117,91 @@ class AuthService:
             response["debug_link"] = verify_url
             
         return response
+
+    async def register_user(self, data: dict) -> dict:
+        """Registers a new user using email and password via Supabase Auth."""
+        try:
+            if not self._supabase:
+                raise Exception("Supabase client is not initialized")
+                
+            response = self._supabase.auth.sign_up({
+                "email": data["email"],
+                "password": data["password"],
+                "options": {
+                    "data": {
+                        "full_name": data["full_name"],
+                        "phone": data["phone"]
+                    }
+                }
+            })
+            
+            user = response.user
+            if not user:
+                return {"status": "error", "message": "Sign up failed"}
+
+            # Insert into public.users table for visibility in dashboard
+            try:
+                self._supabase.table("users").insert({
+                    "id": user.id,
+                    "full_name": data["full_name"],
+                    "email": data["email"],
+                    "phone": data.get("phone"),
+                    "email_verified": False,
+                    "phone_verified": False
+                }).execute()
+                logger.info(f"Successfully synced user {user.id} to public.users table")
+            except Exception as sync_error:
+                logger.warning(f"Sign up succeeded but sync to public.users failed: {sync_error}")
+                
+            return {
+                "status": "success", 
+                "message": "Registration successful", 
+                "user": {
+                    "id": user.id, 
+                    "email": user.email, 
+                    "name": data["full_name"]
+                },
+                "session": response.session.access_token if response.session else None
+            }
+        except Exception as e:
+            logger.error(f"Error registering user: {e}")
+            return {"status": "error", "message": str(e)}
+            
+    async def login_user(self, email: str, password: str) -> dict:
+        """Logs in a user using email and password via Supabase Auth."""
+        try:
+            if not self._supabase:
+                raise Exception("Supabase client is not initialized")
+            
+            logger.info(f"Login attempt for {email}. Checking Supabase reachability...")
+            if not await self._check_reachability():
+                raise Exception("Network Error: Backend cannot reach Supabase. Please check your internet connection and SUPABASE_URL.")
+
+            logger.info("Supabase is reachable. Attempting authentication...")
+            response = self._supabase.auth.sign_in_with_password({
+                "email": email,
+                "password": password
+            })
+            
+            user = response.user
+            if not user:
+                return {"status": "error", "message": "Invalid email or password"}
+                
+            return {
+                "status": "success", 
+                "message": "Login successful", 
+                "user": {
+                    "id": user.id, 
+                    "email": user.email, 
+                    "name": user.user_metadata.get("full_name", user.email) if user.user_metadata else user.email
+                },
+                "session": response.session.access_token if response.session else None
+            }
+        except Exception as e:
+            logger.error(f"Error logging in user {email}: {e}")
+            error_msg = str(e).lower()
+            if "invalid_credentials" in error_msg or "invalid login credentials" in error_msg:
+                return {"status": "error", "message": "Invalid email or password"}
+            elif "email not confirmed" in error_msg:
+                return {"status": "error", "message": "Please confirm your email before logging in."}
+            return {"status": "error", "message": f"Login failed: {str(e)}"}

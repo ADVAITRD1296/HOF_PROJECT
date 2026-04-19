@@ -3,46 +3,68 @@ Legal Guidance API Endpoint
 Handles user queries and returns structured step-by-step legal guidance.
 """
 
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
+from typing import List, Optional
 from app.models.schemas import GuidanceRequest, GuidanceResponse, PDFRequest
 from app.services.rag_service import RAGService
 from app.utils.location_helper import get_location_guidance
 from app.utils.pdf_generator import create_legal_pdf
 from app.document_generator import generate_document
+from app.utils.document_parser import process_attached_files
 from loguru import logger
 
 router = APIRouter()
 rag_service = RAGService()
 
-
 @router.post("/ask", response_model=GuidanceResponse)
-async def ask_legal_question(request: GuidanceRequest):
+async def ask_legal_question(
+    query: str = Form(...),
+    language: str = Form("en"),
+    city: Optional[str] = Form(None),
+    context: Optional[str] = Form(None),
+    files: Optional[List[UploadFile]] = File(None)
+):
     """
-    Main endpoint: accepts a legal query and returns structured guidance.
-    - Retrieves relevant legal context via RAG
-    - Generates step-by-step guidance using LLM
-    - Returns citations, steps, and suggested next actions
-    - Optionally enriches response with location-aware authority guidance
+    Main endpoint: accepts a legal query and optional documents for analysis.
     """
     try:
-        logger.info(f"Received query: {request.query[:80]}...")
+        logger.info(f"Received query: {query[:80]}...")
+        
+        # Process attached files for intelligence
+        aggregated_file_context = ""
+        if files:
+            file_data = []
+            for file in files:
+                content = await file.read()
+                file_data.append((file.filename, content))
+            aggregated_file_context = process_attached_files(file_data)
+            logger.info(f"Extracted intelligence from {len(files)} files")
+
+        # Combine user query with file intelligence
+        intelligence_query = query
+        if aggregated_file_context:
+            intelligence_query += f"\n\n[FILE INTELLIGENCE ATTACHED]\n{aggregated_file_context}"
+
         result = await rag_service.get_guidance(
-            query=request.query,
-            language=request.language,
-            context=request.context,
+            query=intelligence_query,
+            language=language,
+            context=context,
         )
 
-        # --- Location guidance (fail-safe: never breaks existing response) ---
+        # Ensure result query is the original clean query for UI
+        result.query = query
+
+        # --- Location guidance (fail-safe) ---
         location_guidance = None
         try:
-            if request.city:
+            if city:
                 location_guidance = get_location_guidance(
-                    city=request.city,
-                    query=request.query,
+                    city=city,
+                    query=query,
                 )
         except Exception:
-            pass  # Always silent — location is optional
+            pass 
 
         result.location_guidance = location_guidance
         return result
@@ -89,6 +111,27 @@ async def generate_legal_document(request: GuidanceRequest):
         return result
     except Exception as e:
         logger.error(f"Error generating document: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/location-only")
+async def get_standalone_location_guidance(request: GuidanceRequest):
+    """
+    Returns only jurisdictional data (police, courts, helplines) for a specific city.
+    """
+    try:
+        if not request.city:
+            raise HTTPException(status_code=400, detail="City is required for location guidance")
+            
+        location_data = get_location_guidance(
+            city=request.city,
+            query=request.query or "",
+            doc_type=request.doc_type or ""
+        )
+        
+        return location_data
+    except Exception as e:
+        logger.error(f"Error in standalone location guidance: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

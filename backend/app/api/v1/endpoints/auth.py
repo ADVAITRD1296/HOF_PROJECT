@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.models.schemas import OTPSendRequest, OTPVerifyRequest, EmailVerificationRequest
+from app.models.schemas import OTPSendRequest, OTPVerifyRequest, EmailVerificationRequest, LoginRequest, UserRegistrationRequest
 from app.services.auth_service import AuthService
 
 router = APIRouter()
@@ -38,3 +38,23 @@ async def verify_email(token: str, email: str, service: AuthService = Depends(ge
     """
     # Simply verify for now for demo
     return {"status": "success", "message": f"Email {email} verified successfully"}
+
+@router.post("/register")
+async def register(request: UserRegistrationRequest, service: AuthService = Depends(get_auth_service)):
+    """
+    Registers a new user with email and password via Supabase.
+    """
+    result = await service.register_user(request.dict())
+    if result["status"] == "error":
+        raise HTTPException(status_code=400, detail=result["message"])
+    return result
+
+@router.post("/login")
+async def login(request: LoginRequest, service: AuthService = Depends(get_auth_service)):
+    """
+    Logs in a user with email and password via Supabase.
+    """
+    result = await service.login_user(request.email, request.password)
+    if result["status"] == "error":
+        raise HTTPException(status_code=401, detail=result["message"])
+    return result

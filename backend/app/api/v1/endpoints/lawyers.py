@@ -5,14 +5,20 @@ from app.models.schemas import (
     LawyerRegistrationRequest,
     LawyerProfileResponse,
     LawyerMatchRequest,
-    ContactLogRequest
+    ContactLogRequest,
+    OTPSendRequest,
+    OTPVerifyRequest
 )
 from app.services.lawyer_service import LawyerService
+from app.services.auth_service import AuthService
 
 router = APIRouter()
 
 def get_lawyer_service() -> LawyerService:
     return LawyerService()
+
+def get_auth_service() -> AuthService:
+    return AuthService()
 
 @router.post("/register", response_model=LawyerProfileResponse, summary="Register a new lawyer profile")
 async def register_lawyer(
@@ -58,4 +64,33 @@ async def log_contact(
         response = await service.log_contact(request)
         return response
     except Exception as e:
+        logger.error(f"Error logging contact interaction: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/send-otp", summary="Send OTP for lawyer verification")
+async def send_lawyer_otp(
+    request: OTPSendRequest, 
+    service: AuthService = Depends(get_auth_service)
+):
+    """
+    Sends a 6-digit OTP to the lawyer's email address.
+    """
+    result = await service.send_otp(request.identifier, request.method)
+    if result.get("status") == "error":
+        raise HTTPException(status_code=400, detail=result.get("message", "OTP Initialization Failed"))
+    return result
+
+
+@router.post("/verify-otp", summary="Verify lawyer OTP")
+async def verify_lawyer_otp(
+    request: OTPVerifyRequest, 
+    service: AuthService = Depends(get_auth_service)
+):
+    """
+    Verifies the OTP code provided by the lawyer.
+    """
+    success = await service.verify_otp(request.identifier, request.code)
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid or expired OTP code")
+    return {"status": "success", "message": "Lawyer email verified successfully"}

@@ -54,8 +54,27 @@ class LawyerService:
         # PostGIS requires WKT point format: POINT(long lat)
         data["location"] = f"SRID=4326;POINT({lng} {lat})"
         
+        # Mark email as verified since registration occurs post-OTP
+        data["email_verified"] = True
+        # Explicitly set status to match DB constraint expectation
+        data["status"] = "Pending"
+        
         try:
-            response = supabase.table("lawyers").insert(data).execute()
+            try:
+                response = supabase.table("lawyers").insert(data).execute()
+            except Exception as e:
+                # If column doesn't exist, remove it and retry
+                error_str = str(e).lower()
+                cols_to_check = ["email_verified", "id_verified", "state_bar_council"]
+                if "column" in error_str and any(col in error_str for col in cols_to_check):
+                    logger.warning(f"Detection: Database schema mismatch. Retrying without missing columns: {e}")
+                    for col in cols_to_check:
+                        if col in error_str:
+                            data.pop(col, None)
+                    response = supabase.table("lawyers").insert(data).execute()
+                else:
+                    raise e
+
             if not response.data:
                 raise Exception("Failed to insert lawyer record")
                 
