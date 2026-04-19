@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import type { Lawyer } from '../services/mockData';
 import { LawyerCard } from '../components/LawyerCard';
-import { Search, MapPin, Navigation, Filter, Info } from 'lucide-react';
+import { Search, MapPin, Navigation, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { useAppContext } from '../AppContext';

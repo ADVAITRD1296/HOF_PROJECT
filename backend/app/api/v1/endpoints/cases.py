@@ -27,3 +27,12 @@ async def get_user_cases(user_id: str, service: CaseService = Depends(get_case_s
         return await service.get_user_cases(user_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+class CaseUpdate(BaseModel):
+    metadata: dict
+
+@router.patch("/{case_id}")
+async def update_case(case_id: str, request: CaseUpdate, service: CaseService = Depends(get_case_service)):
+    try:
+        return await service.update_case(case_id, request.metadata)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

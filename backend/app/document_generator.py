@@ -21,36 +21,42 @@ except ImportError:
 
 TEMPLATES = {
     "fir": """
-TO THE OFFICER-IN-CHARGE,
+PRATHAM SUCHNA REPORT (FIRST INFORMATION REPORT)
+(Under Section 173 of Bharatiya Nagarik Suraksha Sanhita, 2023 / Section 154 CrPC)
+
+1. DISTRICT: {location}        2. POLICE STATION: {location}
+3. YEAR: 202X                  4. FIR NO: [NOT ASSIGNED]
+
+TO,
+THE OFFICER-IN-CHARGE,
 POLICE STATION: {location}
 
-SUBJECT: FIRST INFORMATION REPORT (FIR) REGARDING {description}
+SUBJECT: REGISTRATION OF FIR REGARDING {description}
 
 RESPECTED SIR/MADAM,
 
-I, {complainantName}, son/daughter of {fatherName}, residing at {address}, phone number {phone}, would like to report an incident that occurred on {dateOfIncident} at {timeOfIncident} near {location}.
+I, {complainantName}, son/daughter of {fatherName}, residing at {address}, would like to report the following cognizable offence:
 
 INCIDENT DETAILS:
-{description}
+- DATE OF OCCURRENCE: {dateOfIncident}
+- TIME: {timeOfIncident}
+- PLACE: {location}
+
+DESCRIPTION: {description}
 
 ACCUSED DETAILS:
 {accusedName}
 
-EVIDENCE PROVIDED:
-{evidence}
+EVIDENCE: {evidence}
 
-I request you to register this FIR under the relevant sections of the Bharatiya Nyaya Sanhita (BNS) / Indian Penal Code (IPC) and initiate a prompt investigation.
-
-YOURS FAITHFULLY,
+I PRAY THAT THE FIR BE REGISTERED AND INVESTIGATION COMMENCED IMMEDIATELY.
 
 (SIGNATURE)
 {complainantName}
 DATE: {currentDate}
 """,
     "legal_notice": """
-LEGAL NOTICE
-
-BY REGISTERED AD/SPEED POST
+BY REGISTERED POST WITH ACK. DUE
 
 DATE: {currentDate}
 
@@ -58,22 +64,24 @@ TO,
 {accusedName}
 ADDRESS: {location}
 
-SUBJECT: LEGAL NOTICE REGARDING {description}
+SUBJECT: LEGAL NOTICE UNDER INSTRUCTION OF MY CLIENT {complainantName}
 
-UNDER INSTRUCTIONS FROM MY CLIENT {complainantName}, residing at {address}, I hereby serve you with the following legal notice:
+SIRS,
 
-1. My client states that on {dateOfIncident}, the following incident occurred: {description}.
-2. Despite repeated requests, you have failed to resolve the matter.
-3. Your actions have caused significant distress and legal injury to my client.
+UNDER INSTRUCTION FROM MY CLIENT {complainantName}, RESIDING AT {address}, I HEREBY SERVE YOU WITH THE FOLLOWING LEGAL NOTICE:
 
-You are hereby called upon to settle this matter within 15 days of receipt of this notice, failing which my client will be constrained to initiate appropriate legal proceedings against you in a court of competent jurisdiction.
+1. That my client is {complainantName} and you are the Opposite Party.
+2. That on {dateOfIncident}, {description}.
+3. That your conduct amounts to a violation of my client's legal rights.
+
+YOU ARE HEREBY CALLED UPON TO COMPLY WITH MY CLIENT'S DEMAND WITHIN 15 DAYS OF RECEIPT OF THIS NOTICE, FAILING WHICH MY CLIENT SHALL BE CONSTRAINED TO INITIATE CIVIL AND CRIMINAL PROCEEDINGS IN A COURT OF COMPETENT JURISDICTION AT YOUR ENTIRE RISK AND CONSEQUENCE.
 
 (SIGNATURE)
 SENDER: {complainantName}
 ON BEHALF OF THE AGGRIEVED PARTY
 """,
     "consumer_complaint": """
-BEFORE THE DISTRICT CONSUMER DISPUTES REDRESSAL COMMISSION, {location}
+BEFORE THE HON'BLE DISTRICT CONSUMER DISPUTES REDRESSAL COMMISSION, {location}
 
 CONSUMER COMPLAINT NO. _____ OF 202X
 
@@ -91,12 +99,15 @@ COMPLAINT UNDER SECTION 35 OF THE CONSUMER PROTECTION ACT, 2019
 
 MOST RESPECTFULLY SHOWETH:
 
-1. That the Complainant purchased/availed services regarding {description} from the Opposite Party.
-2. That on {dateOfIncident}, the Complainant faced the following issues: {description}.
-3. That there is a clear deficiency in service and unfair trade practice on the part of the Opposite Party.
+1. That the Complainant is a 'Consumer' as defined under the CP Act, 2019.
+2. That the Opposite Party is {accusedName}.
+3. That on {dateOfIncident}, {description}.
+4. That there is an 'Unfair Trade Practice' and 'Deficiency in Service' by the Opposite Party.
 
 PRAYER:
-It is, therefore, prayed that this Hon'ble Commission may be pleased to direct the Opposite Party to refund the amount and pay compensation for mental agony and litigation costs.
+IT IS, THEREFORE, MOST RESPECTFULLY PRAYED THAT THIS HON'BLE COMMISSION MAY GRACIOUSLY BE PLEASED TO:
+(a) Direct the Opposite Party to refund the amount;
+(b) Award compensation for mental agony and litigation costs.
 
 (SIGNATURE)
 {complainantName}
@@ -104,26 +115,23 @@ It is, therefore, prayed that this Hon'ble Commission may be pleased to direct t
 """,
     "cybercrime_complaint": """
 TO,
-THE CYBER CRIME CELL,
-CITY: {location}
+THE OFFICER-IN-CHARGE,
+CYBER CRIME CELL, {location}
 
-SUBJECT: COMPLAINT REGARDING CYBER CRIME - {description}
+SUBJECT: COMPLAINT REGARDING {description}
 
 RESPECTED SIR/MADAM,
 
-I, {complainantName}, son/daughter of {fatherName}, residing at {address}, phone number {phone}, wish to report a cybercrime incident.
+I, {complainantName}, son/daughter of {fatherName}, residing at {address}, report the following cyber-incident:
 
 INCIDENT DETAILS:
-- TYPE OF CRIME: Cyber Fraud / Harassment
-- DATE & TIME: {dateOfIncident} at {timeOfIncident}
+- NATURE: Cyber Fraud / Harassment
+- DATE: {dateOfIncident}
 - DESCRIPTION: {description}
-- SUSPECT DETAILS: {accusedName}
-- EVIDENCE: {evidence}
 
-I have already reported this on the National Cyber Crime Reporting Portal (cybercrime.gov.in). I request you to investigate this matter urgently and block any fraudulent transactions if applicable.
+I REQUEST YOU TO TAKE NECESSARY ACTION AND REGISTER THIS UNDER THE RELEVANT SECTIONS OF THE IT ACT AND BNS.
 
 YOURS FAITHFULLY,
-
 (SIGNATURE)
 {complainantName}
 DATE: {currentDate}
@@ -152,29 +160,47 @@ async def _generate_with_llm(doc_type: str, data: Dict[str, Any], language: str 
     
     evidence_str = ", ".join(data.get("evidence", [])) if isinstance(data.get("evidence"), list) else str(data.get("evidence", "Not Provided"))
     
-    prompt = f"""Generate a formal {doc_name} under Indian law in {lang_name} language.
+    # TYPE-SPECIFIC AUTHENTICITY FRAMING
+    framing = ""
+    if doc_type == "FIR":
+        framing = """
+        * MUST include "PRATHAM SUCHNA REPORT" header.
+        * Structure: District/PS Header -> Informant Details -> Occurrence Details -> Narrative -> Prayer for Registration.
+        * Use language like "Cognizable Offence" and "Investigation".
+        """
+    elif "NOTICE" in doc_type:
+        framing = """
+        * MUST include "BY REGISTERED POST WITH AD" and "LEGAL NOTICE" headers.
+        * Frame it from the perspective of an advocate/sender giving "INSTRUCTIONS".
+        * MUST include a "15-day Statutory Period" for compliance.
+        * Use language like "Constrained to initiate legal proceedings" and "Your entire risk and consequence".
+        """
+    elif "COMPLAINT" in doc_type:
+        framing = """
+        * MUST include Court Header: "BEFORE THE HON'BLE DISTRICT CONSUMER COMMISSION".
+        * Use "MOST RESPECTFULLY SHOWETH" to introduce facts.
+        * MUST include a formal "PRAYER" section at the end for relief/compensation.
+        * Use language like "Deficiency in Service" and "Unfair Trade Practice".
+        """
 
-Details:
-* Name: {data.get('complainantName')}
+    prompt = f"""Generate a highly authentic {doc_name} under Indian law in {lang_name} language.
+    
+{framing}
+
+Details for this specific document:
+* Complainant: {data.get('complainantName')}
 * Father's Name: {data.get('fatherName')}
 * Address: {data.get('address')}
-* Phone: {data.get('phone')}
-* Incident: {data.get('description')}
+* Case Description: {data.get('description')}
 * Date of Incident: {data.get('dateOfIncident')}
-* Time: {data.get('timeOfIncident')}
 * Location: {data.get('location')}
 * Accused: {data.get('accusedName')}
 * Evidence: {evidence_str}
 
 STRICT INSTRUCTIONS:
-* DO NOT use placeholders like [Name], [Date], [Place].
-* ALWAYS replace with actual values provided above.
-* If some fields are missing:
-    - Infer from context if possible
-    - Omit gracefully if not critical
-    - Use "Not Provided" or a professional alternative only if absolutely necessary.
-* Use formal legal tone and follow real Indian format.
-* Ensure the document is complete, professional, and ready to submit.
+* Use REAL legal terminology applicable in Indian Courts.
+* DO NOT use placeholders; fill all data from the details provided.
+* Maintain a professional, stern, and legally robust tone.
 * Return ONLY the document text in {lang_name}.
 """
 

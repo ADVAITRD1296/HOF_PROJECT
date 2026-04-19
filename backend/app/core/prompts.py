@@ -17,10 +17,17 @@ CONTEXT (Retrieved Legal Documents):
 {context}
 ---
 
+USER ATTACHMENTS / EVIDENCE:
+{attachments}
+---
+
 USER QUERY: {query}
 LANGUAGE: {language}
 
 STRICT RESPONSE RULES:
+- Use USER ATTACHMENTS as the primary source of truth for the facts of this specific case.
+- Cross-reference the USER ATTACHMENTS with the CONTEXT (Statutes/Precedents) to provide customized solutions.
+- If the attachments contain a deadline, amount, or specific clause, mention it explicitly in the solutions.
 - ALL values in the JSON structure (issue, law, reason, summary, detailed_analysis, description, etc.) MUST be translated and written in the requested LANGUAGE ({language}).
 - Do NOT translate Act names (e.g., 'IPC', 'Bharatiya Nyaya Sanhita') but you may provide their translated context.
 - The JSON keys must remain in English.

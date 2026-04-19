@@ -1,22 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAppContext } from '../AppContext';
 import { api } from '../services/api';
 import { CaseCard } from '../components/CaseCard';
+import { NewCaseModal } from '../components/NewCaseModal';
 import { Briefcase, Activity, PlusCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const CasesPage: React.FC = () => {
-  const { cases, setCases, state } = useAppContext();
+  const { cases, setCases, state, activeChatHistory } = useAppContext();
+  const [isNewCaseModalOpen, setIsNewCaseModalOpen] = useState(false);
+
+  const fetchCases = useCallback(() => {
+    api.getCases(state.user?.id).then(setCases);
+  }, [state.user?.id, setCases]);
 
   useEffect(() => {
-    if (cases.length === 0) {
-      api.getCases(state.user?.id).then(setCases);
-    }
-  }, [cases.length, setCases, state.user?.id]);
+    fetchCases();
+  }, [fetchCases]);
+
+  // Create a virtual case for the current active session history
+  const activeSessionCase = activeChatHistory.length > 0 ? {
+    id: "live-session",
+    title: "Current Active Session",
+    status: "Action pending",
+    strength: 0,
+    law: "In Progress",
+    lastUpdated: new Date().toISOString(),
+    metadata: { history: activeChatHistory }
+  } as any : null;
+
+  const displayCases = activeSessionCase ? [activeSessionCase, ...cases] : cases;
 
   return (
     <div className="flex flex-col h-full w-full">
-      {/* Header */}
+      <NewCaseModal 
+        isOpen={isNewCaseModalOpen} 
+        onClose={() => setIsNewCaseModalOpen(false)} 
+        onSuccess={fetchCases}
+      />
+      {/* Header logic... */}
       <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
@@ -37,6 +59,7 @@ export const CasesPage: React.FC = () => {
         <motion.button 
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          onClick={() => setIsNewCaseModalOpen(true)}
           className="bg-primary text-primary-foreground font-manrope font-extrabold px-6 py-3 rounded-2xl hover:bg-primary/90 transition-all flex items-center gap-2 shadow-[0_10px_30px_rgba(233,193,118,0.2)]"
         >
           <PlusCircle className="w-5 h-5" />
@@ -47,14 +70,14 @@ export const CasesPage: React.FC = () => {
       {/* Grid */}
       <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-12">
         <AnimatePresence mode="wait">
-          {cases.length > 0 ? (
+          {displayCases.length > 0 ? (
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6"
             >
-              {cases.map(c => (
-                <CaseCard key={c.id} data={c} onClick={(id) => console.log('Open case', id)} />
+              {displayCases.map(c => (
+                <CaseCard key={c.id} data={c} />
               ))}
             </motion.div>
           ) : (

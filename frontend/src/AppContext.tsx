@@ -10,7 +10,7 @@ interface User {
 
 interface AppContextType {
   userInput: string;
-  setUserInput: (input: string) => void;
+  setUserInput: React.Dispatch<React.SetStateAction<string>>;
   aiResponse: LegalResponse | null;
   setAiResponse: (response: LegalResponse | null) => void;
   cases: Case[];
@@ -23,6 +23,8 @@ interface AppContextType {
   setIsLoading: (loading: boolean) => void;
   attachedFiles: File[];
   setAttachedFiles: (files: File[]) => void;
+  activeChatHistory: any[];
+  setActiveChatHistory: React.Dispatch<React.SetStateAction<any[]>>;
   // State for Auth
   state: {
     user: User | null;
@@ -40,6 +42,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [language, setLanguage] = useState<'en' | 'hi'>('en');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [activeChatHistory, setActiveChatHistory] = useState<any[]>([]);
   
   // Auth state
   const [state, setState] = useState<{ user: User | null }>({
@@ -64,6 +67,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       language, setLanguage,
       isLoading, setIsLoading,
       attachedFiles, setAttachedFiles,
+      activeChatHistory, setActiveChatHistory,
       state, setState
     }}>
       {children}

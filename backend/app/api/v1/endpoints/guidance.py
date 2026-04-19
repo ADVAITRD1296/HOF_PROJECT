@@ -5,7 +5,7 @@ Handles user queries and returns structured step-by-step legal guidance.
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
-from typing import List, Optional
+from typing import List, Optional, Union
 from app.models.schemas import GuidanceRequest, GuidanceResponse, PDFRequest
 from app.services.rag_service import RAGService
 from app.utils.location_helper import get_location_guidance
@@ -23,7 +23,7 @@ async def ask_legal_question(
     language: str = Form("en"),
     city: Optional[str] = Form(None),
     context: Optional[str] = Form(None),
-    files: Optional[List[UploadFile]] = File(None)
+    files: Optional[Union[List[UploadFile], UploadFile]] = File(None)
 ):
     """
     Main endpoint: accepts a legal query and optional documents for analysis.
@@ -31,6 +31,10 @@ async def ask_legal_question(
     try:
         logger.info(f"Received query: {query[:80]}...")
         
+        # Normalization to handle single vs multi-file uploads (Common Pydantic v2 strictness fix)
+        if files and not isinstance(files, list):
+            files = [files]
+            
         # Process attached files for intelligence
         aggregated_file_context = ""
         if files:
@@ -41,15 +45,12 @@ async def ask_legal_question(
             aggregated_file_context = process_attached_files(file_data)
             logger.info(f"Extracted intelligence from {len(files)} files")
 
-        # Combine user query with file intelligence
-        intelligence_query = query
-        if aggregated_file_context:
-            intelligence_query += f"\n\n[FILE INTELLIGENCE ATTACHED]\n{aggregated_file_context}"
-
+        # Combination remains for backward compatibility in logs, but we pass them separately now
         result = await rag_service.get_guidance(
-            query=intelligence_query,
+            query=query,
             language=language,
             context=context,
+            attachments=aggregated_file_context
         )
 
         # Ensure result query is the original clean query for UI

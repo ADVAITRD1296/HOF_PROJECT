@@ -3,20 +3,68 @@ import { Mic } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface VoiceInputButtonProps {
-  onSimulateInput: () => void;
+  onTranscript: (text: string) => void;
+  language: string;
 }
 
-export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({ onSimulateInput }) => {
+declare global {
+  interface Window {
+    webkitSpeechRecognition: any;
+    SpeechRecognition: any;
+  }
+}
+
+export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({ onTranscript, language }) => {
   const [isListening, setIsListening] = useState(false);
+  const recognitionRef = React.useRef<any>(null);
+
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+      alert("Voice input is not supported in this browser. Please use Chrome or Edge.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = language === 'en' ? 'en-IN' : 'hi-IN';
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      onTranscript(transcript);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+    recognitionRef.current = recognition;
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+  };
 
   const handleClick = () => {
-    if (isListening) return;
-    setIsListening(true);
-    // Simulate listening for 2 seconds
-    setTimeout(() => {
-      setIsListening(false);
-      onSimulateInput();
-    }, 2000);
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
   };
 
   return (

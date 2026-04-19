@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UploadCloud, File, CheckCircle, ShieldCheck, Lock } from 'lucide-react';
+import { UploadCloud, File, CheckCircle, Lock } from 'lucide-react';
 import { api } from '../services/api';
 import type { UploadResult } from '../services/mockData';
 import { motion, AnimatePresence } from 'framer-motion';

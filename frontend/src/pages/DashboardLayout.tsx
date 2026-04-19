@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { MessageSquare, Briefcase, FileText, Users, Settings, LogOut, Star, Map } from 'lucide-react';
+import { MessageSquare, Briefcase, Users, Settings, LogOut, Star, Map, Activity } from 'lucide-react';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { FeedbackModal } from '../components/FeedbackModal';
 import { useAppContext } from '../AppContext';
@@ -29,8 +29,8 @@ export const DashboardLayout: React.FC = () => {
     { name: 'Ask Legal Problem', path: '/dashboard/ask', icon: MessageSquare },
     { name: 'Nearby Authorities', path: '/dashboard/authorities', icon: Map },
     { name: 'My Repository', path: '/dashboard/cases', icon: Briefcase },
+    { name: 'Legal Analytics', path: '/dashboard/analytics', icon: Activity },
     { name: 'Identity Vault', path: '/dashboard/profile', icon: Users },
-    { name: 'Intelligence Docs', path: '/dashboard/documents', icon: FileText },
     { name: 'Lawyer Connect', path: '/dashboard/lawyers', icon: Users },
     { name: 'System Protocols', path: '/dashboard/settings', icon: Settings },
   ];

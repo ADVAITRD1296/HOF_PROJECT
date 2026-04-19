@@ -6,12 +6,11 @@ import { ChatInput } from '../components/ChatInput';
 import { LegalCard } from '../components/LegalCard';
 import { StepList } from '../components/StepList';
 import { ActionPanel } from '../components/ActionPanel';
-import { SuggestionChips } from '../components/SuggestionChips';
 import { EvidenceList } from '../components/EvidenceList';
 import { LocationGuidance } from '../components/LocationGuidance';
-import { Scale, BookOpen, HelpCircle, ArrowRightCircle, AlertTriangle, Blocks, AlignLeft, ShieldCheck, Zap, MapPin } from 'lucide-react';
+import { Scale, Zap, MapPin, BookOpen, HelpCircle, ArrowRightCircle, AlertTriangle, Blocks, AlignLeft } from 'lucide-react';
 import { DocumentModal } from '../components/DocumentModal';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export const AssistantPage: React.FC = () => {
   const navigate = useNavigate();
@@ -21,10 +20,10 @@ export const AssistantPage: React.FC = () => {
     setUserInput, 
     attachedFiles, setAttachedFiles,
     language,
+    activeChatHistory, setActiveChatHistory,
     state 
   } = useAppContext();
 
-  const [history, setHistory] = useState<{ type: 'user' | 'ai'; content: any; timestamp: Date }[]>([]);
   const [docModalOpen, setDocModalOpen] = useState(false);
   const [activeDocType, setActiveDocType] = useState<'FIR' | 'Complaint' | 'Notice'>('FIR');
   const [hasPrompted, setHasPrompted] = useState(false);
@@ -33,7 +32,7 @@ export const AssistantPage: React.FC = () => {
   useEffect(() => {
     // Attempt city detection on mount
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(async (pos) => {
+      navigator.geolocation.getCurrentPosition(async (_pos) => {
         try {
           // Simple reverse lookup using a free service or just assume popular cities for this demo
           // For now, we'll just log and let the backend handle normalization if we pass coords 
@@ -53,21 +52,21 @@ export const AssistantPage: React.FC = () => {
     
     // Add user input to history immediately
     const userInteraction = { type: 'user' as const, content: text, timestamp: new Date() };
-    setHistory(prev => [...prev, userInteraction]);
+    setActiveChatHistory(prev => [...prev, userInteraction]);
     
     setAiResponse(null);
     try {
       const result = await api.getLegalGuidance(text, attachedFiles, language, userCity);
       setAiResponse(result);
-      setHistory(prev => [...prev, { type: 'ai', content: result, timestamp: new Date() }]);
+      setActiveChatHistory(prev => [...prev, { type: 'ai', content: result, timestamp: new Date() }]);
       
       // Successfully ingested: reset input state
       setUserInput('');
       setAttachedFiles([]);
     } catch (e: any) {
-      console.error(e);
-      const errorMessage = e.message || "The intelligence stream encountered a protocol error. Please verify your connection.";
-      alert(`Protocol Error: ${errorMessage}`);
+      console.error("Assistant Intelligence Protocol Error:", e);
+      const errorMessage = e.message || "Unknown error in intelligence cluster.";
+      alert(`Intelligence Protocol Disruption: ${errorMessage}`);
       // We keep the userInput so the user doesn't lose their data on retry
     } finally {
       setIsLoading(false);
@@ -94,7 +93,8 @@ export const AssistantPage: React.FC = () => {
           metadata: {
             law: aiResponse.law,
             strength: aiResponse.strength,
-            analysis: aiResponse.detailed_analysis
+            analysis: aiResponse.detailed_analysis,
+            history: activeChatHistory // Persist full chat transcript
           }
         });
         alert("Case initialized successfully. Navigating to repository...");
@@ -142,7 +142,7 @@ export const AssistantPage: React.FC = () => {
         )}
 
         <div className="w-full flex-1 space-y-12 mb-12">
-          {history.map((item, idx) => (
+          {activeChatHistory.map((item, idx) => (
             <div key={idx} className="space-y-6">
               {item.type === 'user' ? (
                 <motion.div 

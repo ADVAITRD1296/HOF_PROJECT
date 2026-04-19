@@ -46,8 +46,8 @@ def process_attached_files(files: List[tuple]) -> str:
     'files' is expected to be a list of (filename, content_bytes) tuples.
     """
     combined_context = ""
-    for filename, content in files:
-        combined_context += f"\n--- ATTACHMENT: {filename} ---\n"
+    for idx, (filename, content) in enumerate(files, 1):
+        combined_context += f"\n[DOCUMENT {idx}: {filename}]\n"
         if filename.lower().endswith('.pdf'):
             combined_context += extract_text_from_pdf(content)
         elif filename.lower().endswith(('.png', '.jpg', '.jpeg')):
@@ -57,6 +57,6 @@ def process_attached_files(files: List[tuple]) -> str:
                 combined_context += content.decode('utf-8', errors='ignore')
             except:
                 combined_context += "[Unreadable text format]"
-        combined_context += "\n"
+        combined_context += "\n--- END OF DOCUMENT {idx} ---\n"
     
     return combined_context

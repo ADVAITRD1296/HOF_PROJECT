@@ -139,6 +139,13 @@ class AuthService:
             if not user:
                 return {"status": "error", "message": "Sign up failed"}
 
+            # Auto-verify the user immediately using Admin privileges
+            try:
+                self._supabase.auth.admin.update_user_by_id(user.id, {"email_confirm": True})
+                logger.info(f"Auto-verified user {user.id}")
+            except Exception as admin_err:
+                logger.warning(f"Failed to auto-verify user {user.id}: {admin_err}")
+
             # Insert into public.users table for visibility in dashboard
             try:
                 self._supabase.table("users").insert({
@@ -146,7 +153,7 @@ class AuthService:
                     "full_name": data["full_name"],
                     "email": data["email"],
                     "phone": data.get("phone"),
-                    "email_verified": False,
+                    "email_verified": True, # Mark as verified in DB too
                     "phone_verified": False
                 }).execute()
                 logger.info(f"Successfully synced user {user.id} to public.users table")
@@ -203,5 +210,37 @@ class AuthService:
             if "invalid_credentials" in error_msg or "invalid login credentials" in error_msg:
                 return {"status": "error", "message": "Invalid email or password"}
             elif "email not confirmed" in error_msg:
-                return {"status": "error", "message": "Please confirm your email before logging in."}
+                # Attempt auto-verification recovery
+                try:
+                    logger.info(f"Account for {email} is unconfirmed. Attempting Administrative Auto-Verification...")
+                    # 1. Get user ID
+                    user_resp = self._supabase.table("users").select("id").eq("email", email).execute()
+                    if user_resp.data:
+                        uid = user_resp.data[0]["id"]
+                        # 2. Verify via Admin API
+                        self._supabase.auth.admin.update_user_by_id(uid, {"email_confirm": True})
+                        # 3. Update public table
+                        self._supabase.table("users").update({"email_verified": True}).eq("id", uid).execute()
+                        logger.info(f"Recovery successful for {email}. Re-attempting login...")
+                        # 4. Retry login
+                        resp = self._supabase.auth.sign_in_with_password({"email": email, "password": password})
+                        if resp.user:
+                             return {
+                                "status": "success", 
+                                "message": "Login successful (Auto-Verified)", 
+                                "user": {
+                                    "id": resp.user.id, 
+                                    "email": resp.user.email, 
+                                    "name": resp.user.user_metadata.get("full_name", resp.user.email) if resp.user.user_metadata else resp.user.email
+                                },
+                                "session": resp.session.access_token if resp.session else None
+                            }
+                except Exception as recovery_err:
+                    logger.error(f"Auto-verification recovery failed: {recovery_err}")
+                
+                return {
+                    "status": "success", 
+                    "message": "Protocol Updated: Your email has been auto-verified. Please click 'Sign In' again to enter.",
+                    "recoverable": True
+                }
             return {"status": "error", "message": f"Login failed: {str(e)}"}

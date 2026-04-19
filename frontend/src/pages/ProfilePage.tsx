@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Mail, Phone, Calendar, BadgeCheck, Zap, CreditCard } from 'lucide-react';
+import { Shield, Mail, Phone, BadgeCheck, CreditCard } from 'lucide-react';
 import { useAppContext } from '../AppContext';
 
 export const ProfilePage: React.FC = () => {

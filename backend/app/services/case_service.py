@@ -44,3 +44,15 @@ class CaseService:
         except Exception as e:
             logger.error(f"Error fetching case {case_id}: {e}")
             return None
+    async def update_case(self, case_id: str, metadata: dict) -> dict:
+        """Updates case metadata."""
+        try:
+            response = self._supabase.table("cases").update({
+                "metadata": metadata
+            }).eq("id", case_id).execute()
+            if not response.data:
+                raise Exception("Failed to update case")
+            return response.data[0]
+        except Exception as e:
+            logger.error(f"Error updating case {case_id}: {e}")
+            raise e

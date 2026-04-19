@@ -12,12 +12,13 @@ import {
 } from './mockData';
 
 export const api = {
-  async getLegalGuidance(query: string, files?: File[], language: 'en' | 'hi' = 'en', city: string = 'India'): Promise<LegalResponse> {
+  async getLegalGuidance(query: string, files?: File[], language: 'en' | 'hi' = 'en', city: string = 'India', context?: string): Promise<LegalResponse> {
     try {
       const formData = new FormData();
       formData.append('query', query);
       formData.append('language', language);
       formData.append('city', city);
+      if (context) formData.append('context', context);
 
       if (files && files.length > 0) {
         files.forEach((file) => {
@@ -104,11 +105,26 @@ export const api = {
         description: c.description,
         strength: c.metadata?.strength || 70,
         law: c.metadata?.law || "Indian Statutes",
-        lastUpdated: c.created_at // Match interface
+        lastUpdated: c.created_at, // Match interface
+        metadata: c.metadata
       }));
     } catch (error) {
       console.warn("Backend /cases failed, using mock data", error);
       return mockCases;
+    }
+  },
+  async getCaseById(caseId: string, userId?: string): Promise<Case | null> {
+    const allCases = await this.getCases(userId);
+    return allCases.find(c => c.id === caseId) || null;
+  },
+
+  async updateCaseMetadata(caseId: string, metadata: any): Promise<any> {
+    try {
+      const response = await axiosInstance.patch(`/cases/${caseId}`, { metadata });
+      return response.data;
+    } catch (error) {
+      console.error("API Error (updateCaseMetadata):", error);
+      throw error;
     }
   },
 
@@ -273,6 +289,37 @@ export const api = {
       return response.data;
     } catch (error) {
       console.error("API Error (verifyLawyerOTP):", error);
+      throw error;
+    }
+  },
+
+  async analyzeCaseStrength(data: {
+    case_description: string;
+    evidence_list: string[];
+    witnesses: boolean;
+    documentation: boolean;
+    case_type: string;
+  }): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/extensions/case-strength/analyze', data);
+      return response.data;
+    } catch (error) {
+      console.error("API Error (analyzeCaseStrength):", error);
+      throw error;
+    }
+  },
+
+  async estimateCaseDuration(data: {
+    case_type: string;
+    court_level: string;
+    complexity: string;
+    jurisdiction?: string;
+  }): Promise<any> {
+    try {
+      const response = await axiosInstance.post('/extensions/case-duration/estimate', data);
+      return response.data;
+    } catch (error) {
+      console.error("API Error (estimateCaseDuration):", error);
       throw error;
     }
   }

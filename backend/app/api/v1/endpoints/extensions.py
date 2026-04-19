@@ -4,12 +4,14 @@ from app.models.extended_schemas import (
     CaseCardRequest, CaseCardResponse, 
     DeadlineRequest, DeadlineResponse,
     StrengthRequest, StrengthResponse,
+    DurationRequest, DurationResponse,
     JourneyCreateRequest, JourneyUpdateRequest, JourneyResponse,
     BaseApiResponse
 )
 from app.services.case_card_service import CaseCardService
 from app.services.deadline_service import DeadlineService
 from app.services.strength_service import StrengthService
+from app.services.duration_service import DurationService
 from app.services.journey_service import JourneyService
 
 router = APIRouter()
@@ -18,7 +20,12 @@ router = APIRouter()
 case_card_service = CaseCardService()
 deadline_service = DeadlineService()
 strength_service = StrengthService()
+duration_service = DurationService()
 journey_service = JourneyService()
+
+@router.get("/test")
+async def test_extensions():
+    return {"status": "extensions router is reachable"}
 
 # ── Feature 1: Shareable Case Card ──────────────────────────────────────────────
 
@@ -110,3 +117,18 @@ async def get_journey(journey_id: str):
 async def get_user_journeys(user_id: str):
     data = await journey_service.get_user_journeys(user_id)
     return BaseApiResponse(success=True, data=data)
+
+# ── Feature 5: Case Duration Predictor ──────────────────────────────────────────
+
+@router.post("/case-duration/estimate", response_model=BaseApiResponse)
+async def estimate_case_duration(request: DurationRequest):
+    try:
+        data = await duration_service.estimate_duration(
+            case_type=request.case_type,
+            court_level=request.court_level,
+            complexity=request.complexity,
+            jurisdiction=request.jurisdiction
+        )
+        return BaseApiResponse(success=True, data=data)
+    except Exception as e:
+        return BaseApiResponse(success=False, error=str(e))

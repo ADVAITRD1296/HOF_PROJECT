@@ -88,6 +88,23 @@ class JourneyResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+# ── Feature 5: Case Duration Predictor Schemas ────────────────────────────────
+
+class DurationRequest(BaseModel):
+    case_type: str
+    court_level: str # District, High Court, Supreme Court
+    complexity: str # Low, Medium, High
+    jurisdiction: Optional[str] = None
+
+class DurationResponse(BaseModel):
+    estimated_months_min: int
+    estimated_months_max: int
+    confidence_score: int # 1-100
+    factors_considered: List[str]
+    bottlenecks: List[str]
+    optimizations: List[str]
+    precedent_basis: str
+
 # ── Generic Response Wrapper ───────────────────────────────────────────────
 
 class BaseApiResponse(BaseModel):

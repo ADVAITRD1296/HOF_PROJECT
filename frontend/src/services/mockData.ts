@@ -51,6 +51,7 @@ export interface Case {
   law?: string;
   description?: string;
   lastUpdated: string;
+  metadata?: any;
 }
 
 export interface Lawyer {
@@ -81,9 +82,24 @@ export const mockLegalResponse: LegalResponse = {
   law: "Section 35, Consumer Protection Act, 2019",
   reason: "The service provider failed to deliver the promised services after receiving payment, which constitutes a deficiency in service under the CPA 2019.",
   steps: [
-    "Send a formal Legal Notice to the service provider giving them 15 days to resolve the issue.",
-    "If unresolved, file a formal complaint online at the National Consumer Helpline (NCH) portal.",
-    "Draft a formal complaint for the District Consumer Disputes Redressal Commission if NCH yields no result."
+    {
+      step_number: 1,
+      title: "Send Legal Notice",
+      description: "Send a formal Legal Notice to the service provider giving them 15 days to resolve the issue.",
+      action_required: "Draft Notice"
+    },
+    {
+      step_number: 2,
+      title: "File NCH Complaint",
+      description: "If unresolved, file a formal complaint online at the National Consumer Helpline (NCH) portal.",
+      action_required: "Visit NCH Portal"
+    },
+    {
+      step_number: 3,
+      title: "Consumer Commission",
+      description: "Draft a formal complaint for the District Consumer Disputes Redressal Commission if NCH yields no result.",
+      action_required: "Prepare Litigation"
+    }
   ],
   next_steps: [
     "Generate Legal Notice",
@@ -105,23 +121,40 @@ export const mockLegalResponse: LegalResponse = {
     }
   ],
   summary: "You have a strong case for deficient service. The first immediate step is sending a formal legal notice to establish a paper trail.",
+  detailed_analysis: "The transaction history and communication logs provide substantiative evidence of a breach of contract and deficiency in service as defined under Section 35 of the Consumer Protection Act, 2019. Jurisdictional factors align with your current location for filing at the District Commission.",
   strength: 82,
 };
 
 export const mockCases: Case[] = [
   {
     id: "case_101",
+    title: "E-Commerce Refund Protocol",
     issueType: "E-Commerce Fraud",
     status: "Action pending",
     strength: 82,
-    lastUpdated: "2026-04-18"
+    law: "Consumer Protection Act, 2019",
+    lastUpdated: "2026-04-18",
+    metadata: {
+      history: [
+        { type: 'user', content: "I was overcharged by an e-commerce platform for a defective product." },
+        { type: 'ai', content: { summary: "This appears to be a clear violation of consumer rights. You are entitled to a refund and compensation for deficiency in service." } }
+      ]
+    }
   },
   {
     id: "case_102",
+    title: "Residential Tenancy Dispute",
     issueType: "Tenant Dispute",
     status: "Filed",
     strength: 95,
-    lastUpdated: "2026-04-05"
+    law: "Rent Control Act",
+    lastUpdated: "2026-04-05",
+    metadata: {
+      history: [
+        { type: 'user', content: "The landlord is refusing to return my security deposit without valid reason." },
+        { type: 'ai', content: { summary: "Under the Rent Control Act, security deposits must be returned within 30 days of vacation, subject to legal deductions." } }
+      ]
+    }
   }
 ];
 

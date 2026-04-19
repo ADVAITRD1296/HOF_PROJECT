@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { LawyerVerificationModal } from '../components/LawyerVerificationModal';
-import { ShieldCheck, MapPin, Briefcase, Scale, ArrowRight, Check } from 'lucide-react';
+import { ShieldCheck, MapPin, Briefcase, Scale, ArrowRight } from 'lucide-react';
 
 export const LawyerSignUpPage: React.FC = () => {
   const navigate = useNavigate();

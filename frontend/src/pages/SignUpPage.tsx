@@ -162,12 +162,29 @@ export const SignUpPage: React.FC = () => {
               </div>
             </div>
             
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs text-center"
+              >
+                {error}
+              </motion.div>
+            )}
+            
             <button 
-              className="w-full mt-4 bg-primary text-primary-foreground font-manrope font-bold text-sm py-4 rounded-full hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(232,232,232,0.1)]" 
+              className="w-full mt-4 bg-primary text-primary-foreground font-manrope font-bold text-sm py-4 rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(232,232,232,0.1)]" 
               type="submit"
+              disabled={isLoading}
             >
-              Establish Authority
-              <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+              ) : (
+                <>
+                  Establish Authority
+                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                </>
+              )}
             </button>
           </form>
           

@@ -6,12 +6,13 @@ import { SignUpPage } from './pages/SignUpPage';
 import { DashboardLayout } from './pages/DashboardLayout';
 import { AssistantPage } from './pages/AssistantPage';
 import { CasesPage } from './pages/CasesPage';
-import { DocumentsPage } from './pages/DocumentsPage';
+import { CaseDetailPage } from './pages/CaseDetailPage';
 import { LawyersPage } from './pages/LawyersPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { LawyerSignUpPage } from './pages/LawyerSignUpPage';
 import { AuthoritiesPage } from './pages/AuthoritiesPage';
+import { AnalyticsPage } from './pages/AnalyticsPage';
 
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
             <Route index element={<Navigate to="/dashboard/ask" replace />} />
             <Route path="ask" element={<AssistantPage />} />
             <Route path="cases" element={<CasesPage />} />
-            <Route path="documents" element={<DocumentsPage />} />
+            <Route path="cases/:id" element={<CaseDetailPage />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="authorities" element={<AuthoritiesPage />} />
             <Route path="lawyers" element={<LawyersPage />} />
             <Route path="profile" element={<ProfilePage />} />

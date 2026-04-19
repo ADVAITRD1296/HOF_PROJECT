@@ -4,7 +4,7 @@ const API_BASE_URL = 'http://localhost:8000/api/v1';
 
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 15000, // 15 second timeout to prevent infinite "Authenticating" hang
+  timeout: 60000, // Increased to 60s to handle RAG + LLM analysis latency
   headers: {
     'Content-Type': 'application/json',
   },
@@ -28,6 +28,11 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Standardize error responses but keep full response available
     let message = error.response?.data?.detail || error.message || 'An unexpected network error occurred';
+    
+    // If the error message is a validation object or array (common in FastAPI), stringify it
+    if (typeof message === 'object') {
+      message = JSON.stringify(message);
+    }
     
     if (error.code === 'ECONNABORTED' || message.includes('timeout')) {
       message = "Backend is not responding (Timeout). Check if uvicorn is running and your internet is stable.";

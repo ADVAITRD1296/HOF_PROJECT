@@ -140,9 +140,10 @@ HISTORICAL CASE EXAMPLES (PRECEDENTS):
         query: str,
         language: str = "en",
         context: Optional[str] = None,
+        attachments: Optional[str] = None,
     ) -> GuidanceResponse:
         """
-        Upgraded RAG pipeline with Live Search and Precedents.
+        Upgraded RAG pipeline with Live Search, Precedents, and Document Intelligence.
         """
         logger.info(f"Generating hybrid guidance for: {query[:60]}...")
         
@@ -159,6 +160,7 @@ HISTORICAL CASE EXAMPLES (PRECEDENTS):
             
         prompt = LEGAL_GUIDANCE_PROMPT.format(
             context=context_string,
+            attachments=attachments or "No documents uploaded by user.",
             query=query,
             language=language
         )
@@ -169,10 +171,10 @@ HISTORICAL CASE EXAMPLES (PRECEDENTS):
 
         try:
             chat_completion = groq_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="llama-3.3-70b-versatile",
                 messages=messages,
                 temperature=0.2,
-                max_tokens=2048,
+                max_tokens=4096,
                 response_format={"type": "json_object"}
             )
             
@@ -216,10 +218,10 @@ HISTORICAL CASE EXAMPLES (PRECEDENTS):
         
         try:
             chat_completion = groq_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="llama-3.3-70b-versatile",
                 messages=messages,
                 temperature=0.3,
-                max_tokens=2048,
+                max_tokens=4096,
             )
             
             content = chat_completion.choices[0].message.content

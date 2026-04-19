@@ -33,12 +33,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
     }
   };
 
-  const handleSimulateVoice = () => {
-    setUserInput(
-      language === 'en' 
-        ? "I ordered a laptop online 3 weeks ago but it hasn't arrived. The seller stopped replying to my emails and isn't refunding my money."
-        : "Maine 3 hafte pehle online laptop order kiya tha par abhi tak nahi aaya. Seller emails ka reply nahi kar raha aur paise bhi wapas nahi de raha."
-    );
+  const handleTranscript = (transcript: string) => {
+    // Append transcript if there's already text, or set it if empty
+    setUserInput(prev => prev ? `${prev} ${transcript}` : transcript);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +79,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
           rows={1}
         />
         <div className="p-2 pb-2.5">
-          <VoiceInputButton onSimulateInput={handleSimulateVoice} />
+          <VoiceInputButton onTranscript={handleTranscript} language={language} />
         </div>
       </div>
       
