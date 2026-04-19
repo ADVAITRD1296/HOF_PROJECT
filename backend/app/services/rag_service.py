@@ -26,18 +26,19 @@ except ImportError:
     Groq = None
 
 
+from app.services.search_service import SearchService
+
 class RAGService:
     """
-    Retrieval-Augmented Generation service for legal guidance.
-    Combines vector search with LLM generation to produce
-    grounded, step-by-step legal guidance.
+    Retrieval-Augmented Generation service with Live Updates and Precedents.
     """
 
     def __init__(self):
         self._supabase: Optional[Client] = None
         self._embedding_model = None
         self._groq_client = None
-        logger.info("RAGService initialized (lazy loading enabled)")
+        self._search_service = SearchService()
+        logger.info("RAGService initialized with Live Search capabilities")
 
     def _load_supabase(self) -> Optional[Client]:
         """Lazy-load the Supabase client."""
@@ -71,7 +72,7 @@ class RAGService:
                 logger.warning("Groq API Key missing or groq not installed.")
         return self._groq_client
 
-    def _retrieve_context(self, query: str, top_k: int = 4) -> List[Dict]:
+    def _retrieve_context(self, query: str, top_k: int = 4, doc_type: Optional[str] = None) -> List[Dict]:
         """Retrieve relevant legal chunks from Supabase using match_legal_documents RPC."""
         supabase = self._load_supabase()
         embedding_model = self._load_embedding_model()
@@ -87,12 +88,52 @@ class RAGService:
                     "query_embedding": query_embedding,
                     "match_threshold": 0.3,
                     "match_count": top_k,
+                    "p_doc_type": doc_type
                 },
             ).execute()
             return response.data if response.data else []
         except Exception as e:
             logger.error(f"Error querying Supabase: {e}")
             return []
+
+    async def _retrieve_hybrid_context(self, query: str) -> str:
+        """
+        Retrieves context from multiple sources:
+        1. Local Vector DB (Statutes)
+        2. Local Vector DB (Historical Case Precedents)
+        3. Live Web Search (Amendments/Recent Changes)
+        """
+        # 1. Local Statutes
+        local_statutes = self._retrieve_context(query, doc_type="statute")
+        statute_context = "\n".join([
+            f"STATUTE: {d.get('act_name')} Sec {d.get('section', 'N/A')} - {d.get('chunk_text', '')}"
+            for d in local_statutes
+        ])
+        
+        # 2. Historical Case Examples (Semantic Retrieval)
+        local_cases = self._retrieve_context(query, doc_type="case", top_k=5)
+        case_context = "\n".join([
+            f"HISTORICAL CASE: {d.get('title')} ({d.get('section', 'N/A')})\nSummary: {d.get('chunk_text', '')}"
+            for d in local_cases
+        ])
+        
+        # 3. Live Updates (Amendments)
+        amendments = await self._search_service.fetch_latest_amendments()
+        amendment_context = "\n".join([
+            f"LATEST ENROLLMENT/UPDATE: {a['title']} (Ref: {a['date']})"
+            for a in amendments
+        ]) if amendments else ""
+
+        return f"""
+STRICT STATUTORY LAW:
+{statute_context}
+
+LATEST LEGAL UPDATES/AMENDMENTS:
+{amendment_context}
+
+HISTORICAL CASE EXAMPLES (PRECEDENTS):
+{case_context}
+"""
 
     async def get_guidance(
         self,
@@ -101,36 +142,20 @@ class RAGService:
         context: Optional[str] = None,
     ) -> GuidanceResponse:
         """
-        Main RAG pipeline:
-        1. Retrieve relevant legal chunks from vector DB
-        2. Build prompt with retrieved context
-        3. Generate structured step-by-step guidance via LLM
-        4. Parse and return structured response
+        Upgraded RAG pipeline with Live Search and Precedents.
         """
-        logger.info(f"Processing guidance query [{language}]: {query[:60]}...")
+        logger.info(f"Generating hybrid guidance for: {query[:60]}...")
         
-        # 1. Retrieve
-        retrieved_docs = self._retrieve_context(query)
+        # 1. Retrieve Hybrid Context
+        context_string = await self._retrieve_hybrid_context(query)
         
-        if not retrieved_docs:
-            context_string = "No relevant context found in database. Provide general guidance if possible."
-        else:
-            context_string = "\n\n".join([
-                f"Source: {chunk.get('act_name', 'Act')} Section {chunk.get('section', '')} - {chunk.get('title', '')}\nText: {chunk.get('chunk_text', '')}"
-                for chunk in retrieved_docs
-            ])
-            
-        logger.info(f"Retrieved {len(retrieved_docs)} context chunks.")
-
-        # 2. Add extra user context if provided
         if context:
             context_string += f"\n\nADDITIONAL USER CONTEXT:\n{context}"
 
-        # 3. Call Groq
+        # 2. Call Groq
         groq_client = self._load_groq_client()
-        
         if not groq_client:
-            raise Exception("Groq client is not available. Please check GROQ_API_KEY.")
+            raise Exception("Groq client not available")
             
         prompt = LEGAL_GUIDANCE_PROMPT.format(
             context=context_string,
