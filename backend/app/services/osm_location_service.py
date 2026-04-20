@@ -137,18 +137,16 @@ class OSMLocationService:
             
         radius_m = radius_km * 1000
         
-        # Overpass query to get all three categories at once
+        # Overpass query to get all categories (Nodes, Ways, and Relations)
+        # Includes notaries as they are essential legal services in India
         query = f"""
-        [out:json][timeout:25];
+        [out:json][timeout:30];
         (
-          node["amenity"="police"](around:{radius_m},{lat},{lon});
-          way["amenity"="police"](around:{radius_m},{lat},{lon});
-          
-          node["amenity"="courthouse"](around:{radius_m},{lat},{lon});
-          way["amenity"="courthouse"](around:{radius_m},{lat},{lon});
-          
-          node["office"="lawyer"](around:{radius_m},{lat},{lon});
-          way["office"="lawyer"](around:{radius_m},{lat},{lon});
+          nwr["amenity"="police"](around:{radius_m},{lat},{lon});
+          nwr["amenity"="courthouse"](around:{radius_m},{lat},{lon});
+          nwr["office"="lawyer"](around:{radius_m},{lat},{lon});
+          nwr["office"="notary"](around:{radius_m},{lat},{lon});
+          nwr["government"="justice"](around:{radius_m},{lat},{lon});
         );
         out center;
         """
@@ -198,9 +196,9 @@ class OSMLocationService:
                     
                     if tags.get("amenity") == "police":
                         police_stations.append(place_info)
-                    elif tags.get("amenity") == "courthouse":
+                    elif tags.get("amenity") == "courthouse" or tags.get("government") == "justice":
                         courts.append(place_info)
-                    elif tags.get("office") == "lawyer":
+                    elif tags.get("office") in ["lawyer", "notary"]:
                         legal_services.append(place_info)
                         
                 # Sort by distance
