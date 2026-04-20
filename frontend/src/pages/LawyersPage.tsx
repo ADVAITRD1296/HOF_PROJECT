@@ -63,34 +63,34 @@ export const LawyersPage: React.FC = () => {
   return (
     <div className="flex flex-col h-full w-full">
       {/* Header */}
-      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="mb-6 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
-              <Navigation className="w-5 h-5 text-primary" />
+            <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg border border-primary/20">
+              <Navigation className="w-4 h-4 md:w-5 md:h-5 text-primary" />
             </div>
-            <h1 className="text-4xl font-manrope font-extrabold text-white tracking-tight">Lawyer Connect</h1>
+            <h1 className="text-2xl md:text-4xl font-manrope font-extrabold text-white tracking-tight">Lawyer Connect</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <p className="text-muted-foreground font-sans text-sm">Verified legal professionals within your immediate jurisdiction.</p>
-            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest ${
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <p className="text-muted-foreground font-sans text-xs md:text-sm">Verified legal professionals within your jurisdiction.</p>
+            <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[9px] md:text-[10px] font-bold uppercase tracking-widest w-fit ${
               locationStatus === 'Active' ? 'bg-[#4ADE80]/10 border-[#4ADE80]/30 text-[#4ADE80]' : 'bg-white/5 border-white/5 text-muted-foreground'
             }`}>
               <MapPin className="w-3 h-3" />
-              {locationStatus === 'Detecting' ? 'Scanning Environment...' : locationStatus === 'Active' ? 'Automatic Match: Active' : 'Default Connectivity'}
+              {locationStatus === 'Detecting' ? 'Scanning...' : locationStatus === 'Active' ? 'Automatic Match: Active' : 'Default Connectivity'}
             </div>
           </div>
         </div>
 
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="relative w-full md:w-96 group">
+        <form onSubmit={handleSearch} className="relative w-full md:w-80 lg:w-96 group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-white transition-colors" />
           <input 
             type="text" 
-            placeholder="Search by specialty or name..."
+            placeholder="Search specialties..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all shadow-lg"
+            className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl py-2.5 md:py-3 pl-11 md:pl-12 pr-4 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all shadow-lg"
           />
         </form>
       </div>

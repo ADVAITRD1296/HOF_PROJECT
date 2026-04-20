@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { GenerativeArtScene } from '../components/ui/anomalous-matter-hero';
+import { Menu, X } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
-    <div className="bg-[#000000] text-foreground font-sans antialiased min-h-screen flex flex-col selection:bg-secondary selection:text-secondary-foreground">
+    <div className="bg-[#000000] text-foreground font-sans antialiased min-h-screen flex flex-col selection:bg-secondary selection:text-secondary-foreground overflow-x-hidden">
       {/* TopAppBar */}
       <nav className="fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 h-20 bg-black/60 backdrop-blur-xl border-b border-white/5">
         <div className="flex items-center gap-8">
@@ -15,10 +18,12 @@ export const LandingPage: React.FC = () => {
             </span>
           </Link>
         </div>
-        <div className="flex flex-row items-center gap-4">
+        
+        {/* Desktop Nav Actions */}
+        <div className="hidden md:flex flex-row items-center gap-4">
           <Link 
             to="/sign-in" 
-            className="hidden md:block font-manrope text-sm tracking-wide text-white bg-white/5 border border-white/20 backdrop-blur-md shadow-[inset_0_0_15px_rgba(255,255,255,0.1)] px-5 py-2 rounded-full hover:bg-white/10 transition-all duration-300"
+            className="font-manrope text-sm tracking-wide text-white bg-white/5 border border-white/20 backdrop-blur-md shadow-[inset_0_0_15px_rgba(255,255,255,0.1)] px-5 py-2 rounded-full hover:bg-white/10 transition-all duration-300"
           >
             Sign In
           </Link>
@@ -35,10 +40,52 @@ export const LandingPage: React.FC = () => {
             Join as Lawyer
           </Link>
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <button 
+          className="md:hidden p-2 text-white"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </nav>
 
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 top-20 bg-black/95 backdrop-blur-2xl z-40 md:hidden flex flex-col p-8 gap-6"
+          >
+            <Link 
+              to="/sign-in" 
+              className="text-2xl font-manrope font-bold text-white py-4 border-b border-white/10"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Sign In
+            </Link>
+            <Link 
+              to="/sign-up" 
+              className="text-2xl font-manrope font-bold text-white py-4 border-b border-white/10"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Get Started
+            </Link>
+            <Link 
+              to="/lawyer-sign-up" 
+              className="text-2xl font-manrope font-bold text-[#e9c176] py-4 border-b border-white/10"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Join as Lawyer
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main Content */}
-      <main className="space-y-32 flex-grow">
+      <main className="space-y-24 md:space-y-32 flex-grow">
         {/* Hero Section */}
         <section className="relative w-full min-h-screen flex flex-col items-center justify-center pt-24 pb-24 overflow-hidden bg-black">
           {/* 3D Generative Background Section */}
@@ -54,23 +101,31 @@ export const LandingPage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center z-10 max-w-4xl px-8 flex flex-col items-center mt-32"
+            className="text-center z-10 max-w-4xl px-6 md:px-8 flex flex-col items-center mt-20 md:mt-32"
           >
-            <div className="text-xs font-mono tracking-[0.15em] text-muted-foreground mb-6 uppercase">Launch Sequence: Anomaly 12</div>
-            <h1 className="text-5xl md:text-7xl font-manrope font-bold tracking-tight text-white mb-8 leading-[1.1]">
-              Not Just Answers, <br/>But Action.
+            <div className="text-[10px] md:text-xs font-mono tracking-[0.15em] text-muted-foreground mb-4 md:mb-6 uppercase text-center">Launch Sequence: Anomaly 12</div>
+            <h1 className="text-4xl md:text-7xl font-manrope font-bold tracking-tight text-white mb-6 md:mb-8 leading-[1.1]">
+              Not Just Answers, <br className="hidden md:block"/>But Action.
             </h1>
-            <p className="text-base md:text-lg text-muted-foreground font-sans max-w-xl mx-auto leading-relaxed">
+            <p className="text-sm md:text-lg text-muted-foreground font-sans max-w-xl mx-auto leading-relaxed">
               The AI mentor that guides you through India's legal system step-by-step. Complex legal jargon translated into clear, actionable strategy.
             </p>
+            <div className="mt-10 md:hidden w-full flex flex-col gap-4">
+               <Link 
+                to="/sign-up" 
+                className="w-full font-manrope font-bold text-base text-white bg-white/10 border border-white/20 backdrop-blur-md px-8 py-4 rounded-full text-center"
+              >
+                Get Started
+              </Link>
+            </div>
           </motion.div>
         </section>
 
         {/* Process Section */}
-        <section className="max-w-7xl mx-auto px-8 lg:px-12">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl lg:text-4xl font-manrope font-bold text-primary tracking-tight">The LexisCo Process</h2>
-            <p className="text-muted-foreground mt-4 text-lg">From complex problem to concrete action.</p>
+        <section className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+          <div className="mb-12 md:mb-16 text-center">
+            <h2 className="text-2xl md:text-4xl font-manrope font-bold text-primary tracking-tight">The LexisCo Process</h2>
+            <p className="text-muted-foreground mt-3 text-base md:text-lg">From complex problem to concrete action.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -80,12 +135,12 @@ export const LandingPage: React.FC = () => {
               { id: '03', icon: 'fact_check', title: 'Clear Breakdown', desc: 'Understand your rights exactly. No legalese, just a transparent strategic overview.' },
               { id: '04', icon: 'description', title: 'Generate Documents', desc: 'Auto-draft actionable FIRs, formal complaints, or legal notices ready for submission.', highlight: true }
             ].map((step) => (
-              <div key={step.id} className="p-8 rounded-2xl bg-card border border-border hover:bg-popover transition-colors duration-300 relative group">
-                <div className={`absolute -top-4 -left-4 w-12 h-12 bg-black font-manrope font-bold rounded-xl flex items-center justify-center border border-border shadow-xl ${step.highlight ? 'text-[#e9c176]' : 'text-primary'}`}>
+              <div key={step.id} className="p-6 md:p-8 rounded-2xl bg-card border border-border hover:bg-popover transition-colors duration-300 relative group">
+                <div className={`absolute -top-4 -left-4 w-10 h-10 md:w-12 md:h-12 bg-black font-manrope font-bold rounded-xl flex items-center justify-center border border-border shadow-xl ${step.highlight ? 'text-[#e9c176]' : 'text-primary'}`}>
                   {step.id}
                 </div>
-                <span className={`material-symbols-outlined text-4xl mb-6 block font-light ${step.highlight ? 'text-[#e9c176]' : 'text-primary'}`}>{step.icon}</span>
-                <h3 className="font-manrope font-bold text-xl text-primary mb-3">{step.title}</h3>
+                <span className={`material-symbols-outlined text-3xl md:text-4xl mb-4 md:mb-6 block font-light ${step.highlight ? 'text-[#e9c176]' : 'text-primary'}`}>{step.icon}</span>
+                <h3 className="font-manrope font-bold text-lg md:text-xl text-primary mb-3">{step.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
               </div>
             ))}
@@ -93,18 +148,18 @@ export const LandingPage: React.FC = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section className="max-w-7xl mx-auto px-8 lg:px-12">
-          <div className="mb-16 text-center flex flex-col items-center">
+        <section className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+          <div className="mb-12 md:mb-16 text-center flex flex-col items-center">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-block px-5 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-widest text-primary mb-6 shadow-sm"
+              className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-primary mb-6 shadow-sm"
             >
               Protocol Feedback
             </motion.div>
-            <h2 className="text-4xl md:text-5xl font-manrope font-bold text-white tracking-tight mb-4">What our users say</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">See what our customers have to say about us and how LexisCo has empowered them to take legal action.</p>
+            <h2 className="text-3xl md:text-5xl font-manrope font-bold text-white tracking-tight mb-4 text-center">What our users say</h2>
+            <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto text-center">See what our customers have to say about us and how LexisCo has empowered them to take legal action.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -130,14 +185,14 @@ export const LandingPage: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: (colIdx * 2 + idx) * 0.1 }}
-                    className="p-8 rounded-2xl bg-card border border-border hover:bg-popover transition-colors duration-300 shadow-xl"
+                    className="p-6 md:p-8 rounded-2xl bg-card border border-border hover:bg-popover transition-colors duration-300 shadow-xl"
                   >
-                    <p className="text-muted-foreground leading-relaxed mb-6 font-sans italic text-sm">"{item.content}"</p>
+                    <p className="text-muted-foreground leading-relaxed mb-6 font-sans italic text-xs md:text-sm">"{item.content}"</p>
                     <div className="flex items-center gap-4">
-                      <img alt={item.name} className="w-10 h-10 rounded-full object-cover border border-white/10" src={item.img} />
+                      <img alt={item.name} className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border border-white/10" src={item.img} />
                       <div>
-                        <h4 className="font-manrope font-bold text-white text-sm">{item.name}</h4>
-                        <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{item.role}</p>
+                        <h4 className="font-manrope font-bold text-white text-xs md:text-sm">{item.name}</h4>
+                        <p className="text-[8px] md:text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{item.role}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -148,45 +203,46 @@ export const LandingPage: React.FC = () => {
         </section>
 
         {/* Bottom CTA */}
-        <section className="text-center pb-24 px-8 mt-24">
-          <h2 className="text-4xl font-manrope font-extrabold text-primary mb-8 tracking-tight">Take the First Step Towards Justice.</h2>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+        <section className="text-center pb-24 px-6 md:px-8 mt-12 md:mt-24">
+          <h2 className="text-3xl md:text-4xl font-manrope font-extrabold text-primary mb-8 tracking-tight">Take the First Step Towards Justice.</h2>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
             <Link 
               to="/sign-up"
-              className="inline-flex font-manrope font-bold text-lg text-white bg-white/5 border border-white/20 backdrop-blur-md shadow-[inset_0_0_15px_rgba(255,255,255,0.1)] px-10 py-4 rounded-full hover:bg-white/10 transition-all duration-300"
+              className="w-full md:w-auto inline-flex items-center justify-center font-manrope font-bold text-base md:text-lg text-white bg-white/5 border border-white/20 backdrop-blur-md shadow-[inset_0_0_15px_rgba(255,255,255,0.1)] px-10 py-4 rounded-full hover:bg-white/10 transition-all duration-300"
             >
-              Start Your Case Analysis
+              Start Case Analysis
             </Link>
             <Link 
               to="/lawyer-sign-up"
-              className="inline-flex font-manrope font-bold text-lg text-[#e9c176] bg-[#e9c176]/5 border border-[#e9c176]/20 backdrop-blur-md px-10 py-4 rounded-full hover:bg-[#e9c176]/10 transition-all duration-300"
+              className="w-full md:w-auto inline-flex items-center justify-center font-manrope font-bold text-base md:text-lg text-[#e9c176] bg-[#e9c176]/5 border border-[#e9c176]/20 backdrop-blur-md px-10 py-4 rounded-full hover:bg-[#e9c176]/10 transition-all duration-300"
             >
-              Join the Legal Network
+              Join the Network
             </Link>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="w-full mx-auto px-12 py-16 border-t border-white/5 bg-black relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-white/5 rounded-full blur-[100px] pointer-events-none opacity-30"></div>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 relative z-10">
-          <div className="md:col-span-1 flex flex-col justify-start gap-6">
-            <Link to="/" className="text-3xl text-white font-manrope font-extrabold leading-none tracking-tighter hover:opacity-80 transition-opacity">LexisCo</Link>
-            <p className="text-muted-foreground text-sm">© 2026 Sovereign Scholar. All rights reserved.</p>
+      <footer className="w-full mx-auto px-6 md:px-12 py-16 border-t border-white/5 bg-black relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] md:w-[800px] h-[300px] md:h-[400px] bg-white/5 rounded-full blur-[80px] md:blur-[100px] pointer-events-none opacity-30"></div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-12 relative z-10">
+          <div className="md:col-span-2 flex flex-col justify-start gap-4">
+            <Link to="/" className="text-2xl md:text-3xl text-white font-manrope font-extrabold leading-none tracking-tighter hover:opacity-80 transition-opacity">LexisCo</Link>
+            <p className="text-muted-foreground text-xs md:text-sm max-w-xs">The AI mentor that guides you through India's legal system step-by-step.</p>
+            <p className="text-muted-foreground text-[10px] md:text-xs">© 2026 Sovereign Scholar. All rights reserved.</p>
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <h4 className="text-white font-medium text-sm font-manrope">Product</h4>
-            <div className="flex flex-col gap-3">
-              <a className="text-muted-foreground hover:text-white transition-colors text-sm" href="#">Features</a>
-              <a className="text-muted-foreground hover:text-white transition-colors text-sm" href="#">Pricing</a>
+            <div className="flex flex-col gap-2">
+              <a className="text-muted-foreground hover:text-white transition-colors text-xs md:text-sm" href="#">Features</a>
+              <a className="text-muted-foreground hover:text-white transition-colors text-xs md:text-sm" href="#">Pricing</a>
             </div>
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <h4 className="text-white font-medium text-sm font-manrope">Company</h4>
-            <div className="flex flex-col gap-3">
-              <a className="text-muted-foreground hover:text-white transition-colors text-sm" href="#">About Us</a>
-              <a className="text-muted-foreground hover:text-white transition-colors text-sm" href="#">Privacy Policy</a>
+            <div className="flex flex-col gap-2">
+              <a className="text-muted-foreground hover:text-white transition-colors text-xs md:text-sm" href="#">About Us</a>
+              <a className="text-muted-foreground hover:text-white transition-colors text-xs md:text-sm" href="#">Privacy Policy</a>
             </div>
           </div>
         </div>
@@ -194,3 +250,4 @@ export const LandingPage: React.FC = () => {
     </div>
   );
 };
+

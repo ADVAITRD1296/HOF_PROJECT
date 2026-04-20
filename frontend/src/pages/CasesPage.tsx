@@ -39,18 +39,18 @@ export const CasesPage: React.FC = () => {
         onSuccess={fetchCases}
       />
       {/* Header logic... */}
-      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="mb-6 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
-              <Briefcase className="w-5 h-5 text-primary" />
+            <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg border border-primary/20">
+              <Briefcase className="w-4 h-4 md:w-5 md:h-5 text-primary" />
             </div>
-            <h1 className="text-4xl font-manrope font-extrabold text-white tracking-tight">Case Repository</h1>
+            <h1 className="text-2xl md:text-4xl font-manrope font-extrabold text-white tracking-tight">Case Repository</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <p className="text-muted-foreground font-sans text-sm">Real-time tracking of litigation strategy and probability metrics.</p>
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[10px] text-muted-foreground font-bold uppercase tracking-widest leading-none">
-              <Activity className="w-3 h-3 text-primary animate-pulse" /> 
+          <div className="flex flex-wrap items-center gap-4">
+            <p className="text-muted-foreground font-sans text-xs md:text-sm">Real-time tracking of litigation strategy and probability metrics.</p>
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[9px] md:text-[10px] text-muted-foreground font-bold uppercase tracking-widest leading-none">
+              <Activity className="w-2.5 h-2.5 md:w-3 md:h-3 text-primary animate-pulse" /> 
               Active Monitoring
             </div>
           </div>
@@ -60,7 +60,7 @@ export const CasesPage: React.FC = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setIsNewCaseModalOpen(true)}
-          className="bg-primary text-primary-foreground font-manrope font-extrabold px-6 py-3 rounded-2xl hover:bg-primary/90 transition-all flex items-center gap-2 shadow-[0_10px_30px_rgba(233,193,118,0.2)]"
+          className="w-full md:w-auto bg-primary text-primary-foreground font-manrope font-extrabold px-6 py-3 rounded-xl md:rounded-2xl hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(233,193,118,0.2)]"
         >
           <PlusCircle className="w-5 h-5" />
           New Docket

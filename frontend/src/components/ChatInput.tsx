@@ -50,7 +50,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full max-w-4xl mx-auto">
+    <div className="flex flex-col gap-2 md:gap-3 w-full max-w-4xl mx-auto px-2 md:px-0">
       <input 
         type="file" 
         multiple 
@@ -63,7 +63,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
         <button
           type="button"
           onClick={triggerFileUpload}
-          className="p-4 pr-2 text-muted-foreground hover:text-white transition-colors"
+          className="p-3 md:p-4 pr-1 md:pr-2 text-muted-foreground hover:text-white transition-colors"
           title="Attach evidence"
         >
           <Paperclip className="w-5 h-5" />
@@ -74,24 +74,24 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={language === 'en' ? "Describe your problem in simple language" : "Apni samasya aasaan bhasha mein batayein"}
-          className="flex-1 max-h-[150px] min-h-[60px] bg-transparent border-none resize-none p-4 pl-1 pb-4 text-[15px] leading-relaxed text-white placeholder:text-muted-foreground focus:ring-0 focus:outline-none"
+          placeholder={language === 'en' ? "Describe your problem..." : "Apni samasya batayein..."}
+          className="flex-1 max-h-[150px] min-h-[50px] md:min-h-[60px] bg-transparent border-none resize-none p-3 md:p-4 pl-1 pb-3 md:pb-4 text-sm md:text-[15px] leading-relaxed text-white placeholder:text-muted-foreground focus:ring-0 focus:outline-none"
           rows={1}
         />
-        <div className="p-2 pb-2.5">
+        <div className="p-1.5 md:p-2 pb-2 md:pb-2.5">
           <VoiceInputButton onTranscript={handleTranscript} language={language} />
         </div>
       </div>
       
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-1 md:px-0">
         <LanguageToggle />
         
         <button
           onClick={handleSubmit}
           disabled={userInput.trim().length === 0}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-white text-black bg-white hover:bg-[#E8E8E8] hover:border-[#E8E8E8] disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium text-sm"
+          className="flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 rounded-full border border-white text-black bg-white hover:bg-[#E8E8E8] hover:border-[#E8E8E8] disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold md:font-medium text-xs md:text-sm"
         >
-          Analyze <ArrowRight className="w-4 h-4" />
+          Analyze <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4" />
         </button>
       </div>
     </div>

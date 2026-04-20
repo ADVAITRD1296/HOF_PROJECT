@@ -68,27 +68,27 @@ export const SignUpPage: React.FC = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative z-10 w-full max-w-md mx-auto p-12 glass-panel rounded-[2rem] border border-border/30 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center"
+          className="relative z-10 w-full max-w-md mx-6 md:mx-auto p-8 md:p-12 glass-panel rounded-[2rem] border border-border/30 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center"
         >
-          <div className="mb-10 flex flex-col items-center gap-4 w-full">
-            <div className="w-16 h-16 rounded-xl bg-card flex items-center justify-center border border-border/30 shadow-inner">
-              <span className="material-symbols-outlined text-4xl text-primary font-light" style={{ fontVariationSettings: "'FILL' 1" }}>account_balance</span>
+          <div className="mb-8 md:mb-10 flex flex-col items-center gap-3 md:gap-4 w-full">
+            <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-card flex items-center justify-center border border-border/30 shadow-inner">
+              <span className="material-symbols-outlined text-3xl md:text-4xl text-primary font-light" style={{ fontVariationSettings: "'FILL' 1" }}>account_balance</span>
             </div>
-            <h1 className="font-manrope text-3xl font-extrabold tracking-tighter text-primary">Sovereign Scholar</h1>
-            <p className="font-sans text-sm text-muted-foreground tracking-wide uppercase">Authority through Intelligence</p>
+            <h1 className="font-manrope text-2xl md:text-3xl font-extrabold tracking-tighter text-primary text-center">Sovereign Scholar</h1>
+            <p className="font-sans text-[10px] md:text-sm text-muted-foreground tracking-wide uppercase text-center">Authority through Intelligence</p>
           </div>
           
-          <div className="text-center w-full mb-8">
-            <h2 className="font-manrope text-2xl font-bold text-primary tracking-tight mb-2">Create Your Account</h2>
+          <div className="text-center w-full mb-6 md:mb-8">
+            <h2 className="font-manrope text-xl md:text-2xl font-bold text-primary tracking-tight mb-2">Create Your Account</h2>
           </div>
           
-          <form className="w-full flex flex-col gap-6" onSubmit={handleSignUp}>
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs tracking-wider text-muted-foreground uppercase" htmlFor="fullName">Full Name</label>
+          <form className="w-full flex flex-col gap-4 md:gap-6" onSubmit={handleSignUp}>
+            <div className="flex flex-col gap-1.5 md:gap-2">
+              <label className="font-sans text-[10px] tracking-wider text-muted-foreground uppercase" htmlFor="fullName">Full Name</label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">person</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xs md:text-sm">person</span>
                 <input 
-                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
+                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-3 md:py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
                   id="fullName" 
                   placeholder="Enter full name" 
                   type="text"
@@ -99,12 +99,12 @@ export const SignUpPage: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs tracking-wider text-muted-foreground uppercase" htmlFor="email">Email Address</label>
+            <div className="flex flex-col gap-1.5 md:gap-2">
+              <label className="font-sans text-[10px] tracking-wider text-muted-foreground uppercase" htmlFor="email">Email Address</label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">mail</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xs md:text-sm">mail</span>
                 <input 
-                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
+                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-3 md:py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
                   id="email" 
                   placeholder="scholar@lexisco.com" 
                   type="email"
@@ -115,12 +115,12 @@ export const SignUpPage: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs tracking-wider text-muted-foreground uppercase" htmlFor="phone">Phone Number</label>
+            <div className="flex flex-col gap-1.5 md:gap-2 hidden sm:flex">
+              <label className="font-sans text-[10px] tracking-wider text-muted-foreground uppercase" htmlFor="phone">Phone Number</label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">phone</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xs md:text-sm">phone</span>
                 <input 
-                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
+                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-3 md:py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
                   id="phone" 
                   placeholder="(555) 000-0000" 
                   type="tel"
@@ -130,12 +130,12 @@ export const SignUpPage: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs tracking-wider text-muted-foreground uppercase" htmlFor="password">Password</label>
+            <div className="flex flex-col gap-1.5 md:gap-2">
+              <label className="font-sans text-[10px] tracking-wider text-muted-foreground uppercase" htmlFor="password">Password</label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">lock</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xs md:text-sm">lock</span>
                 <input 
-                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
+                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-3 md:py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
                   id="password" 
                   placeholder="••••••••" 
                   type="password"
@@ -146,12 +146,12 @@ export const SignUpPage: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs tracking-wider text-muted-foreground uppercase" htmlFor="confirmPassword">Confirm Password</label>
+            <div className="flex flex-col gap-1.5 md:gap-2">
+              <label className="font-sans text-[10px] tracking-wider text-muted-foreground uppercase" htmlFor="confirmPassword">Confirm Password</label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">lock_reset</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xs md:text-sm">lock_reset</span>
                 <input 
-                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
+                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-3 md:py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
                   id="confirmPassword" 
                   placeholder="••••••••" 
                   type="password"
@@ -166,14 +166,14 @@ export const SignUpPage: React.FC = () => {
               <motion.div 
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs text-center"
+                className="w-full p-3 md:p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] md:text-xs text-center"
               >
                 {error}
               </motion.div>
             )}
             
             <button 
-              className="w-full mt-4 bg-primary text-primary-foreground font-manrope font-bold text-sm py-4 rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(232,232,232,0.1)]" 
+              className="w-full mt-2 md:mt-4 bg-primary text-primary-foreground font-manrope font-bold text-sm py-3.5 md:py-4 rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(232,232,232,0.1)]" 
               type="submit"
               disabled={isLoading}
             >
@@ -188,18 +188,18 @@ export const SignUpPage: React.FC = () => {
             </button>
           </form>
           
-          <div className="w-full flex items-center gap-4 my-8">
-            <div className="flex-grow h-px bg-border"></div>
-            <span className="font-sans text-xs text-muted-foreground uppercase tracking-wider">Or</span>
-            <div className="flex-grow h-px bg-border"></div>
+          <div className="w-full flex items-center gap-4 my-6 md:my-8 text-[#e8e8e8]/10">
+            <div className="flex-grow h-px bg-current"></div>
+            <span className="font-sans text-[10px] text-muted-foreground uppercase tracking-wider">Or</span>
+            <div className="flex-grow h-px bg-current"></div>
           </div>
           
           <button 
-            className="w-full bg-black/30 border border-border/30 text-primary font-sans text-sm py-4 rounded-full hover:bg-card transition-colors duration-300 flex items-center justify-center gap-3 backdrop-blur-md" 
+            className="w-full bg-black/30 border border-border/30 text-primary font-sans text-xs md:text-sm py-3.5 md:py-4 rounded-full hover:bg-card transition-colors duration-300 flex items-center justify-center gap-3 backdrop-blur-md" 
             type="button" 
             onClick={() => alert("Google Authentication is coming in the next protocol version.")}
           >
-            <svg aria-hidden="true" className="w-5 h-5" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24">
               <path d="M12.0003 4.75C13.7703 4.75 15.3553 5.36 16.6053 6.54998L20.0303 3.125C17.9503 1.19 15.2353 0 12.0003 0C7.31028 0 3.25527 2.69 1.28027 6.60998L5.27028 9.70498C6.21528 6.86 8.87028 4.75 12.0003 4.75Z" fill="#EA4335"></path>
               <path d="M23.49 12.275C23.49 11.49 23.415 10.73 23.3 10H12V14.51H18.47C18.18 15.99 17.34 17.25 16.08 18.1L19.945 21.1C22.2 19.01 23.49 15.92 23.49 12.275Z" fill="#4285F4"></path>
               <path d="M5.26498 14.2949C5.02498 13.5699 4.88501 12.7999 4.88501 11.9999C4.88501 11.1999 5.01998 10.4299 5.26498 9.7049L1.275 6.60986C0.46 8.22986 0 10.0599 0 11.9999C0 13.9399 0.46 15.7699 1.28 17.3899L5.26498 14.2949Z" fill="#FBBC05"></path>
@@ -208,14 +208,14 @@ export const SignUpPage: React.FC = () => {
             Authenticate via Google
           </button>
           
-          <div className="mt-10 text-center w-full flex flex-col gap-4">
-            <p className="font-sans text-sm text-muted-foreground">Already have an account? <Link className="text-primary font-medium hover:text-white transition-colors ml-1 border-b border-transparent hover:border-white" to="/sign-in">Sign In</Link></p>
+          <div className="mt-8 md:mt-10 text-center w-full flex flex-col gap-4">
+            <p className="font-sans text-xs md:text-sm text-muted-foreground">Already have an account? <Link className="text-primary font-medium hover:text-white transition-colors ml-1 border-b border-transparent hover:border-white" to="/sign-in">Sign In</Link></p>
             <div className="h-px bg-white/5 w-1/2 mx-auto"></div>
-            <p className="font-sans text-[10px] text-muted-foreground uppercase tracking-widest">Are you a legal professional? <Link className="text-primary font-bold hover:text-white transition-colors ml-1" to="/lawyer-sign-up">Join the Network</Link></p>
+            <p className="font-sans text-[8px] md:text-[10px] text-muted-foreground uppercase tracking-widest px-4 md:px-0">Are you a legal professional? <Link className="text-primary font-bold hover:text-white transition-colors ml-1" to="/lawyer-sign-up">Join the Network</Link></p>
           </div>
         </motion.div>
         
-        <p className="text-center mt-8 font-sans text-[10px] uppercase tracking-[0.2em] text-muted-foreground relative z-10 pb-8">
+        <p className="text-center mt-6 md:mt-8 font-sans text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-muted-foreground relative z-10 pb-8">
             Confidential &amp; Proprietary Protocol
         </p>
       </main>

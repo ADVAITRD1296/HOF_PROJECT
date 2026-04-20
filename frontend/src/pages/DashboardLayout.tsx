@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
-import { MessageSquare, Briefcase, Users, Settings, LogOut, Star, Map, Activity } from 'lucide-react';
+import { Outlet, NavLink, useNavigate, Link, useLocation } from 'react-router-dom';
+import { MessageSquare, Briefcase, Users, Settings, LogOut, Star, Map, Activity, Menu, X } from 'lucide-react';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { FeedbackModal } from '../components/FeedbackModal';
 import { useAppContext } from '../AppContext';
@@ -8,22 +8,33 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const DashboardLayout: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLElement>(null);
   const { state, setState } = useAppContext();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const user = state.user || { name: 'Scholar User', email: 'scholar@lexisco.com' };
+
+  // Close sidebar on navigation (mobile)
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
       }
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node) && isSidebarOpen) {
+        setIsSidebarOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [isSidebarOpen]);
 
   const navItems = [
     { name: 'Ask Legal Problem', path: '/dashboard/ask', icon: MessageSquare },
@@ -41,11 +52,46 @@ export const DashboardLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-black overflow-hidden font-sans text-foreground">
+    <div className="flex h-screen bg-black overflow-hidden font-sans text-foreground flex-col lg:flex-row">
+      {/* Mobile Top Header */}
+      <header className="lg:hidden flex items-center justify-between px-6 h-16 border-b border-border/50 bg-black/40 backdrop-blur-xl z-30">
+        <Link to="/" className="text-lg font-bold tracking-widest uppercase font-manrope text-primary">LexisCo.</Link>
+        <button 
+          onClick={() => setIsSidebarOpen(true)}
+          className="p-2 -mr-2 text-muted-foreground hover:text-white"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+      </header>
+
+      {/* Sidebar Overlay (Mobile) */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
-      <aside className="w-[240px] flex-shrink-0 flex flex-col border-r border-border/50 bg-black/40 backdrop-blur-xl relative z-20">
-        <div className="p-6 pb-8 border-b border-border/50">
+      <aside 
+        ref={sidebarRef}
+        className={`fixed inset-y-0 left-0 w-[280px] lg:w-[240px] flex-shrink-0 flex flex-col border-r border-border/50 bg-black lg:bg-black/40 backdrop-blur-xl z-50 lg:z-20 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="p-6 pb-8 border-b border-border/50 flex items-center justify-between">
           <Link to="/" className="text-xl font-bold tracking-widest uppercase font-manrope text-primary hover:opacity-80 transition-opacity">LexisCo.</Link>
+          <button 
+            onClick={() => setIsSidebarOpen(false)}
+            className="lg:hidden p-2 -mr-2 text-muted-foreground hover:text-white"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
         
         <nav className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto">
@@ -140,3 +186,4 @@ export const DashboardLayout: React.FC = () => {
     </div>
   );
 };
+

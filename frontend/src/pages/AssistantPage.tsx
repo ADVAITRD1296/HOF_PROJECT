@@ -112,18 +112,18 @@ export const AssistantPage: React.FC = () => {
   return (
     <div className="flex flex-col h-full w-full relative">
       {/* Page Header */}
-      <div className="mb-10">
+      <div className="mb-6 md:mb-10">
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
-            <Scale className="w-5 h-5 text-primary" />
+          <div className="p-1.5 md:p-2 bg-primary/10 rounded-lg border border-primary/20">
+            <Scale className="w-4 h-4 md:w-5 md:h-5 text-primary" />
           </div>
-          <h1 className="text-4xl font-manrope font-extrabold text-white tracking-tight">Intelligence Stream</h1>
+          <h1 className="text-2xl md:text-4xl font-manrope font-extrabold text-white tracking-tight">Intelligence Stream</h1>
         </div>
-        <div className="flex flex-wrap items-center gap-4">
-          <p className="text-muted-foreground font-sans text-sm">Initializing cryptographic legal analysis on Indian Statutes.</p>
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
-            <Zap className="w-3 h-3 text-[#e9c176]" /> 
-            Protocol: Llama-3-Sovereign Enabled
+        <div className="flex flex-wrap items-center gap-2 md:gap-4">
+          <p className="text-muted-foreground font-sans text-xs md:text-sm">Initializing cryptographic legal analysis on Indian Statutes.</p>
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[9px] md:text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+            <Zap className="w-2.5 h-2.5 md:w-3 md:h-3 text-[#e9c176]" /> 
+            Protocol: Llama-3-Sovereign
           </div>
         </div>
       </div>
@@ -265,11 +265,11 @@ export const AssistantPage: React.FC = () => {
       </div>
 
       {/* Persistent Footer Input Area */}
-      <div className="sticky bottom-0 w-full pt-6 pb-2 bg-gradient-to-t from-black via-black/90 to-transparent z-30">
+      <div className="sticky bottom-0 w-full pt-4 md:pt-6 pb-2 bg-gradient-to-t from-black via-black/95 to-transparent z-30">
         <EvidenceList />
         <ChatInput onSubmit={handleSubmit} />
-        <div className="mt-4 flex justify-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em]">Enforced Secure Protocol — RSA-2048 Military Grade Encryption</p>
+        <div className="mt-2 md:mt-4 flex justify-center">
+          <p className="text-[8px] md:text-[10px] text-muted-foreground uppercase tracking-[0.15em] md:tracking-[0.2em] text-center px-4">Enforced Secure Protocol — RSA-2048 Military Grade Encryption</p>
         </div>
       </div>
 

@@ -61,37 +61,37 @@ export const SignInPage: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 w-full max-w-md mx-auto p-12 glass-panel rounded-[2rem] border border-border/30 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center"
+          className="relative z-10 w-full max-w-md mx-6 md:mx-auto p-8 md:p-12 glass-panel rounded-[2rem] border border-border/30 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center"
         >
           {/* Logo / Brand Anchor */}
-          <div className="mb-10 flex flex-col items-center gap-4 w-full">
-            <div className="w-16 h-16 rounded-xl bg-card flex items-center justify-center border border-border/30 shadow-inner">
-              <span className="material-symbols-outlined text-4xl text-primary font-light" style={{ fontVariationSettings: "'FILL' 1" }}>account_balance</span>
+          <div className="mb-8 md:mb-10 flex flex-col items-center gap-3 md:gap-4 w-full">
+            <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-card flex items-center justify-center border border-border/30 shadow-inner">
+              <span className="material-symbols-outlined text-3xl md:text-4xl text-primary font-light" style={{ fontVariationSettings: "'FILL' 1" }}>account_balance</span>
             </div>
-            <Link to="/" className="font-manrope text-3xl font-extrabold tracking-tighter text-primary hover:opacity-80 transition-opacity">LexisCo</Link>
-            <p className="font-sans text-sm text-muted-foreground tracking-wide uppercase">The Sovereign Scholar</p>
+            <Link to="/" className="font-manrope text-2xl md:text-3xl font-extrabold tracking-tighter text-primary hover:opacity-80 transition-opacity">LexisCo</Link>
+            <p className="font-sans text-[10px] md:text-sm text-muted-foreground tracking-wide uppercase">The Sovereign Scholar</p>
           </div>
           
           {/* Header */}
-          <div className="text-center w-full mb-8">
-            <h2 className="font-manrope text-2xl font-bold text-primary tracking-tight mb-2">Welcome User</h2>
-            <p className="font-sans text-muted-foreground text-sm">Sign in to access your intelligence dashboard.</p>
+          <div className="text-center w-full mb-6 md:mb-8">
+            <h2 className="font-manrope text-xl md:text-2xl font-bold text-primary tracking-tight mb-2">Welcome User</h2>
+            <p className="font-sans text-muted-foreground text-xs md:text-sm">Sign in to access your intelligence dashboard.</p>
           </div>
           
           {/* Form */}
-          <form className="w-full flex flex-col gap-6" onSubmit={handleSignIn}>
+          <form className="w-full flex flex-col gap-4 md:gap-6" onSubmit={handleSignIn}>
             {error && (
-              <div className="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded-xl text-sm font-sans tracking-wide">
+              <div className="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded-xl text-xs md:text-sm font-sans tracking-wide">
                 {error}
               </div>
             )}
             {/* Email Field */}
-            <div className="flex flex-col gap-2">
-              <label className="font-sans text-xs tracking-wider text-muted-foreground uppercase" htmlFor="email">Email Address</label>
+            <div className="flex flex-col gap-1.5 md:gap-2">
+              <label className="font-sans text-[10px] tracking-wider text-muted-foreground uppercase" htmlFor="email">Email Address</label>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">mail</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xs md:text-sm">mail</span>
                 <input 
-                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
+                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-3 md:py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
                   id="email" 
                   placeholder="scholar@lexisco.com" 
                   type="email"
@@ -103,15 +103,15 @@ export const SignInPage: React.FC = () => {
             </div>
             
             {/* Password Field */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1.5 md:gap-2">
               <div className="flex justify-between items-center">
-                <label className="font-sans text-xs tracking-wider text-muted-foreground uppercase" htmlFor="password">Password</label>
-                <a className="font-sans text-xs text-muted-foreground hover:text-primary transition-colors duration-300" href="#">Forgot?</a>
+                <label className="font-sans text-[10px] tracking-wider text-muted-foreground uppercase" htmlFor="password">Password</label>
+                <a className="font-sans text-[10px] text-muted-foreground hover:text-primary transition-colors duration-300" href="#">Forgot?</a>
               </div>
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">lock</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xs md:text-sm">lock</span>
                 <input 
-                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
+                  className="w-full bg-black/60 border-b border-white/20 focus:border-primary focus:bg-black/80 text-primary font-sans text-sm py-3 md:py-4 pl-12 pr-4 rounded-xl transition-all duration-300 outline-none placeholder:text-muted-foreground/70" 
                   id="password" 
                   placeholder="••••••••" 
                   type="password"
@@ -124,7 +124,7 @@ export const SignInPage: React.FC = () => {
             
             {/* Primary Action */}
             <button 
-              className="w-full mt-4 bg-primary text-primary-foreground font-manrope font-bold text-sm py-4 rounded-full hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(232,232,232,0.1)] disabled:opacity-50" 
+              className="w-full mt-2 md:mt-4 bg-primary text-primary-foreground font-manrope font-bold text-sm py-3.5 md:py-4 rounded-full hover:bg-primary/90 transition-colors duration-300 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(232,232,232,0.1)] disabled:opacity-50" 
               type="submit"
               disabled={isLoading}
             >
@@ -135,26 +135,26 @@ export const SignInPage: React.FC = () => {
             {/* Secondary Action */}
             <Link 
               to="/sign-up"
-              className="w-full mt-3 bg-transparent border border-border text-primary font-manrope font-bold text-sm py-4 rounded-full hover:bg-card transition-colors duration-300 flex items-center justify-center"
+              className="w-full mt-1 md:mt-3 bg-transparent border border-border text-primary font-manrope font-bold text-sm py-3.5 md:py-4 rounded-full hover:bg-card transition-colors duration-300 flex items-center justify-center"
             >
               Create Account
             </Link>
           </form>
           
           {/* Divider */}
-          <div className="w-full flex items-center gap-4 my-8">
+          <div className="w-full flex items-center gap-4 my-6 md:my-8">
             <div className="flex-grow h-px bg-border"></div>
-            <span className="font-sans text-xs text-muted-foreground uppercase tracking-wider">Or</span>
+            <span className="font-sans text-[10px] text-muted-foreground uppercase tracking-wider">Or</span>
             <div className="flex-grow h-px bg-border"></div>
           </div>
           
           {/* Social Login */}
           <button 
-            className="w-full bg-black/30 border border-border/30 text-primary font-sans text-sm py-4 rounded-full hover:bg-card transition-colors duration-300 flex items-center justify-center gap-3 backdrop-blur-md" 
+            className="w-full bg-black/30 border border-border/30 text-primary font-sans text-xs md:text-sm py-3.5 md:py-4 rounded-full hover:bg-card transition-colors duration-300 flex items-center justify-center gap-3 backdrop-blur-md" 
             type="button" 
             onClick={() => alert("Google Authentication is coming in the next protocol version.")}
           >
-            <svg aria-hidden="true" className="w-5 h-5" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24">
               <path d="M12.0003 4.75C13.7703 4.75 15.3553 5.36 16.6053 6.54998L20.0303 3.125C17.9503 1.19 15.2353 0 12.0003 0C7.31028 0 3.25527 2.69 1.28027 6.60998L5.27028 9.70498C6.21528 6.86 8.87028 4.75 12.0003 4.75Z" fill="#EA4335"></path>
               <path d="M23.49 12.275C23.49 11.49 23.415 10.73 23.3 10H12V14.51H18.47C18.18 15.99 17.34 17.25 16.08 18.1L19.945 21.1C22.2 19.01 23.49 15.92 23.49 12.275Z" fill="#4285F4"></path>
               <path d="M5.26498 14.2949C5.02498 13.5699 4.88501 12.7999 4.88501 11.9999C4.88501 11.1999 5.01998 10.4299 5.26498 9.7049L1.275 6.60986C0.46 8.22986 0 10.0599 0 11.9999C0 13.9399 0.46 15.7699 1.28 17.3899L5.26498 14.2949Z" fill="#FBBC05"></path>
@@ -166,18 +166,18 @@ export const SignInPage: React.FC = () => {
       </main>
       
       {/* Footer Container */}
-      <footer className="bg-[#0e0e0e] text-[#c6c6c6] font-sans text-sm tracking-wide full-width py-12 border-t border-[#c6c6c6]/10 flex flex-col md:flex-row justify-between items-center px-12 w-full relative z-10">
-        <div className="text-lg font-bold text-[#c6c6c6] mb-6 md:mb-0">
+      <footer className="bg-[#0e0e0e] text-[#c6c6c6] font-sans text-xs md:text-sm tracking-wide full-width py-10 md:py-12 border-t border-[#c6c6c6]/10 flex flex-col md:flex-row justify-between items-center px-8 md:px-12 w-full relative z-10 gap-6 md:gap-0">
+        <div className="text-lg font-bold text-[#c6c6c6]">
             LexisCo
         </div>
-        <div className="flex flex-wrap justify-center gap-8 mb-6 md:mb-0">
-          <a className="text-[#c6c6c6]/40 hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Legal Terms</a>
-          <a className="text-[#c6c6c6]/40 hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
-          <a className="text-[#c6c6c6]/40 hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Institutional Access</a>
+        <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+          <a className="text-[#c6c6c6]/40 hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Terms</a>
+          <a className="text-[#c6c6c6]/40 hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Privacy</a>
+          <a className="text-[#c6c6c6]/40 hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Institutional</a>
           <a className="text-[#c6c6c6]/40 hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Security</a>
         </div>
-        <div className="text-[#c6c6c6]/40">
-            © 2024 LexisCo. The Sovereign Scholar Framework.
+        <div className="text-[#c6c6c6]/40 text-[10px] md:text-xs">
+            © 2024 LexisCo. Sovereign Scholar.
         </div>
       </footer>
     </div>
