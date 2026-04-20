@@ -1,3 +1,10 @@
+🌐 Live Demo: https://lexisco.vercel.app/
+
+This project is a full-stack web application built with a modern frontend and a FastAPI backend. It provides a seamless user experience with efficient API handling, authentication, and real-time interactions.
+
+>>>>>>
+
+
 # ⚖️ LexisCo — AI Legal Guide
 
 > **"An AI legal assistant that not only explains the law, but guides users step-by-step to take real legal action — making justice accessible to everyone."**
