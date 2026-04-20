@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppContext } from '../AppContext';
 
 export const LawyersPage: React.FC = () => {
-  const { aiResponse } = useAppContext();
+  const { } = useAppContext();
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [searchQuery, setSearchQuery] = useState(''); // Default to empty for automatic nearby suggestions
   const [isLoading, setIsLoading] = useState(true);
